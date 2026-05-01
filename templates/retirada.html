@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Retirada de chave | Guardião de Chaves{% endblock %}
+
+{% block content %}
+
+<section class="titulo-pagina">
+    <h2>Retirada de chave</h2>
+    <p>Registre a retirada de uma chave disponível por um usuário cadastrado.</p>
+</section>
+
+<section class="form-box">
+    <form method="POST">
+
+        <div class="form-grid">
+            <div class="campo">
+                <label for="matricula">Matrícula do usuário</label>
+                <input 
+                    type="text" 
+                    id="matricula" 
+                    name="matricula" 
+                    placeholder="Digite a matrícula do responsável"
+                    required
+                >
+            </div>
+
+            <div class="campo">
+                <label for="chave_id">Chave disponível</label>
+                <select id="chave_id" name="chave_id" required>
+                    <option value="">Selecione uma chave</option>
+
+                    {% for chave in chaves %}
+                        <option value="{{ chave.id }}">
+                            {{ chave.codigo }} - {{ chave.local }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="campo">
+            <label for="observacao">Observação</label>
+            <textarea 
+                id="observacao" 
+                name="observacao" 
+                placeholder="Ex: retirada para aula prática, laboratório, manutenção, atividade acadêmica..."
+            ></textarea>
+        </div>
+
+        <div class="botoes">
+            <button type="submit" class="btn btn-principal">Registrar retirada</button>
+            <a href="{{ url_for('index') }}" class="btn btn-secundario">Voltar</a>
+        </div>
+
+    </form>
+</section>
+
+{% if not chaves %}
+    <section class="form-box" style="margin-top: 18px;">
+        <p>
+            Nenhuma chave disponível no momento. Cadastre uma nova chave ou verifique as devoluções pendentes.
+        </p>
+    </section>
+{% endif %}
+
+{% endblock %}

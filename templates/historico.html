@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Histórico | Guardião de Chaves{% endblock %}
+
+{% block content %}
+
+<section class="titulo-pagina">
+    <h2>Histórico de movimentações</h2>
+    <p>Consulte retiradas, devoluções e movimentações em aberto.</p>
+</section>
+
+<form method="GET" class="filtro">
+    <input 
+        type="text" 
+        name="busca" 
+        placeholder="Buscar por nome, matrícula, chave, local ou status..." 
+        value="{{ busca }}"
+    >
+
+    <button type="submit" class="btn btn-principal">Buscar</button>
+
+    <a href="{{ url_for('historico') }}" class="btn btn-secundario">Limpar</a>
+
+    <a href="{{ url_for('exportar_historico') }}" class="btn btn-principal">Exportar CSV</a>
+</form>
+
+<section class="tabela-box">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Chave</th>
+                <th>Local</th>
+                <th>Responsável</th>
+                <th>Matrícula</th>
+                <th>Retirada</th>
+                <th>Devolução</th>
+                <th>Status</th>
+                <th>Observação</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for mov in movimentacoes %}
+            <tr>
+                <td>{{ mov.id }}</td>
+                <td><strong>{{ mov.codigo }}</strong></td>
+                <td>{{ mov.local }}</td>
+                <td>{{ mov.nome }}</td>
+                <td>{{ mov.matricula }}</td>
+                <td>{{ mov.data_retirada }}</td>
+                <td>{{ mov.data_devolucao or "-" }}</td>
+                <td>
+                    {% if mov.status == "Em aberto" %}
+                        <span class="status aberto">Em aberto</span>
+                    {% elif mov.status == "Finalizada" %}
+                        <span class="status finalizada">Finalizada</span>
+                    {% else %}
+                        <span class="status">{{ mov.status }}</span>
+                    {% endif %}
+                </td>
+                <td>{{ mov.observacao or "-" }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="9">Nenhuma movimentação encontrada.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+
+{% endblock %}

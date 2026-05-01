@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | Guardião de Chaves{% endblock %}
+
+{% block content %}
+
+<section class="titulo-pagina">
+    <h2>Dashboard</h2>
+    <p>Indicadores gerais do controle de chaves.</p>
+</section>
+
+<section class="cards">
+    <div class="card">
+        <h3>Total de chaves</h3>
+        <div class="numero">{{ total_chaves }}</div>
+    </div>
+
+    <div class="card">
+        <h3>Disponíveis</h3>
+        <div class="numero">{{ chaves_disponiveis }}</div>
+    </div>
+
+    <div class="card">
+        <h3>Retiradas</h3>
+        <div class="numero">{{ chaves_retiradas }}</div>
+    </div>
+
+    <div class="card">
+        <h3>Movimentos abertos</h3>
+        <div class="numero">{{ movimentos_abertos }}</div>
+    </div>
+</section>
+
+<section class="cards">
+    <div class="card">
+        <h3>Usuários cadastrados</h3>
+        <div class="numero">{{ total_usuarios }}</div>
+    </div>
+
+    <div class="card">
+        <h3>Total de movimentações</h3>
+        <div class="numero">{{ total_movimentacoes }}</div>
+    </div>
+</section>
+
+<section class="dashboard-grid">
+
+    <div class="tabela-box">
+        <h3 class="subtitulo-tabela">Últimas movimentações</h3>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Chave</th>
+                    <th>Responsável</th>
+                    <th>Retirada</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for mov in ultimas_movimentacoes %}
+                <tr>
+                    <td><strong>{{ mov.codigo }}</strong></td>
+                    <td>{{ mov.nome }}</td>
+                    <td>{{ mov.data_retirada }}</td>
+                    <td>
+                        {% if mov.status == "Em aberto" %}
+                            <span class="status aberto">Em aberto</span>
+                        {% elif mov.status == "Finalizada" %}
+                            <span class="status finalizada">Finalizada</span>
+                        {% else %}
+                            <span class="status">{{ mov.status }}</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4">Nenhuma movimentação registrada.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+<section class="tabela-box indicador-alerta">
+    <h3 class="subtitulo-tabela">Chave há mais tempo sem devolução</h3>
+
+    {% if chave_mais_tempo_aberta %}
+        <div class="alerta-chave">
+            <div>
+                <span class="label-indicador">Chave</span>
+                <strong>{{ chave_mais_tempo_aberta.codigo }}</strong>
+            </div>
+
+            <div>
+                <span class="label-indicador">Local</span>
+                <strong>{{ chave_mais_tempo_aberta.local }}</strong>
+            </div>
+
+            <div>
+                <span class="label-indicador">Responsável</span>
+                <strong>{{ chave_mais_tempo_aberta.nome }}</strong>
+            </div>
+
+            <div>
+                <span class="label-indicador">Tempo em aberto</span>
+                <strong>
+                    {{ chave_mais_tempo_aberta.dias_aberto }} dia(s) e 
+                    {{ chave_mais_tempo_aberta.horas_aberto }} hora(s)
+                </strong>
+            </div>
+
+            <div>
+                <span class="label-indicador">Data da retirada</span>
+                <strong>{{ chave_mais_tempo_aberta.data_retirada }}</strong>
+            </div>
+        </div>
+    {% else %}
+        <p>Nenhuma chave pendente de devolução no momento.</p>
+    {% endif %}
+</section>
+
+    <div class="tabela-box">
+        <h3 class="subtitulo-tabela">Chaves mais utilizadas</h3>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Chave</th>
+                    <th>Local</th>
+                    <th>Usos</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for chave in chaves_mais_utilizadas %}
+                <tr>
+                    <td><strong>{{ chave.codigo }}</strong></td>
+                    <td>{{ chave.local }}</td>
+                    <td>{{ chave.total_usos }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="3">Nenhum dado disponível.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</section>
+
+<section class="tabela-box" style="margin-top: 20px;">
+    <h3 class="subtitulo-tabela">Usuários com mais retiradas</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Responsável</th>
+                <th>Matrícula</th>
+                <th>Total de retiradas</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for usuario in usuarios_mais_ativos %}
+            <tr>
+                <td>{{ usuario.nome }}</td>
+                <td>{{ usuario.matricula }}</td>
+                <td>{{ usuario.total_retiradas }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="3">Nenhum dado disponível.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Início | Guardião de Chaves{% endblock %}
+
+{% block content %}
+
+<section class="titulo-pagina">
+    <h2>Painel inicial</h2>
+    <p>Resumo geral do controle de chaves do CEFET/RJ.</p>
+</section>
+
+<section class="cards">
+    <div class="card">
+        <h3>Total de chaves</h3>
+        <div class="numero">{{ total_chaves }}</div>
+    </div>
+
+    <div class="card">
+        <h3>Chaves disponíveis</h3>
+        <div class="numero">{{ chaves_disponiveis }}</div>
+    </div>
+
+    <div class="card">
+        <h3>Chaves retiradas</h3>
+        <div class="numero">{{ chaves_retiradas }}</div>
+    </div>
+
+    <div class="card">
+        <h3>Movimentos em aberto</h3>
+        <div class="numero">{{ movimentos_abertos }}</div>
+    </div>
+</section>
+
+<section class="acoes">
+    <a class="acao" href="{{ url_for('retirada') }}">
+        <h3>Retirar chave</h3>
+        <p>Registre a retirada de uma chave disponível.</p>
+    </a>
+
+    <a class="acao" href="{{ url_for('devolucao') }}">
+        <h3>Devolver chave</h3>
+        <p>Finalize uma movimentação em aberto.</p>
+    </a>
+
+    <a class="acao" href="{{ url_for('chaves') }}">
+        <h3>Consultar chaves</h3>
+        <p>Veja a situação atual das chaves cadastradas.</p>
+    </a>
+
+    <a class="acao" href="{{ url_for('usuarios') }}">
+        <h3>Usuários</h3>
+        <p>Consulte e cadastre usuários autorizados.</p>
+    </a>
+
+    <a class="acao" href="{{ url_for('historico') }}">
+        <h3>Histórico</h3>
+        <p>Acompanhe retiradas, devoluções e pendências.</p>
+    </a>
+
+    <a class="acao" href="{{ url_for('cadastrar_chave') }}">
+        <h3>Cadastrar chave</h3>
+        <p>Inclua uma nova chave no sistema.</p>
+    </a>
+
+    <a class="acao" href="{{ url_for('cadastrar_usuario') }}">
+        <h3>Cadastrar usuário</h3>
+        <p>Inclua um novo usuário autorizado a retirar chaves.</p>
+    </a>
+
+
+    <a class="acao" href="{{ url_for('dashboard') }}">
+        <h3>Dashboard</h3>
+        <p>Visualize os principais indicadores do controle de chaves.</p>
+    </a>
+</section>
+
+{% endblock %}

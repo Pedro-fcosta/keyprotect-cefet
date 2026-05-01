@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Usuários | Guardião de Chaves{% endblock %}
+
+{% block content %}
+
+<section class="titulo-pagina">
+    <h2>Usuários cadastrados</h2>
+    <p>Consulte os usuários autorizados a retirar chaves.</p>
+</section>
+
+<div class="botoes" style="margin-bottom: 18px;">
+    <a href="{{ url_for('cadastrar_usuario') }}" class="btn btn-principal">Novo usuário</a>
+</div>
+
+<section class="tabela-box">
+    <table>
+        <thead>
+            <tr>
+                <th>Matrícula</th>
+                <th>Nome</th>
+                <th>Curso/Setor</th>
+                <th>Telefone</th>
+                <th>Cadastrado em</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for usuario in usuarios %}
+            <tr>
+                <td><strong>{{ usuario.matricula }}</strong></td>
+                <td>{{ usuario.nome }}</td>
+                <td>{{ usuario.curso_setor or "-" }}</td>
+                <td>{{ usuario.telefone or "-" }}</td>
+                <td>{{ usuario.criado_em }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5">Nenhum usuário cadastrado.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+
+{% endblock %}

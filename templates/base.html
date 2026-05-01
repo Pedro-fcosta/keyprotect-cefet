@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Guardião de Chaves{% endblock %}</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <header class="topbar">
+        <div class="header-content">
+
+            <img src="{{ url_for('static', filename='logo-cefet.png') }}" alt="Logo CEFET/RJ" class="logo-img">
+
+            <p class="subtitulo-sistema">
+                Sistema de controle de retirada e devolução de chaves
+            </p>
+
+            <nav class="menu">
+                <a href="{{ url_for('index') }}">Início</a>
+                <a href="{{ url_for('retirada') }}">Retirada</a>
+                <a href="{{ url_for('devolucao') }}">Devolução</a>
+                <a href="{{ url_for('chaves') }}">Chaves</a>
+                <a href="{{ url_for('usuarios') }}">Usuários</a>
+                <a href="{{ url_for('historico') }}">Histórico</a>
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+
+        </div>
+    </header>
+
+    <main class="container">
+
+        {% with mensagens = get_flashed_messages(with_categories=true) %}
+            {% if mensagens %}
+                <div class="mensagens">
+                    {% for categoria, mensagem in mensagens %}
+                        <div class="alerta {{ categoria }}">
+                            {{ mensagem }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+
+    </main>
+
+</body>
+</html>

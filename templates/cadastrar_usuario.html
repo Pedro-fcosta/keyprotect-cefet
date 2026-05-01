@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Cadastrar usuário | Guardião de Chaves{% endblock %}
+
+{% block content %}
+
+<section class="titulo-pagina">
+    <h2>Cadastrar usuário</h2>
+    <p>Inclua um aluno, servidor ou responsável autorizado a retirar chaves.</p>
+</section>
+
+<section class="form-box">
+    <form method="POST">
+
+        <div class="form-grid">
+            <div class="campo">
+                <label for="matricula">Matrícula</label>
+                <input type="text" id="matricula" name="matricula" placeholder="Ex: 2023123456" required>
+            </div>
+
+            <div class="campo">
+                <label for="nome">Nome completo</label>
+                <input type="text" id="nome" name="nome" placeholder="Ex: Pedro Fernandes" required>
+            </div>
+
+            <div class="campo">
+                <label for="curso_setor">Curso/Setor</label>
+                <input type="text" id="curso_setor" name="curso_setor" placeholder="Ex: Engenharia Mecânica">
+            </div>
+
+            <div class="campo">
+                <label for="telefone">Telefone</label>
+                <input type="text" id="telefone" name="telefone" placeholder="Ex: (21) 99999-9999">
+            </div>
+        </div>
+
+        <div class="botoes">
+            <button type="submit" class="btn btn-principal">Cadastrar usuário</button>
+            <a href="{{ url_for('usuarios') }}" class="btn btn-secundario">Voltar</a>
+        </div>
+
+    </form>
+</section>
+
+{% endblock %}

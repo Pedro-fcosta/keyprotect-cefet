@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Chaves | Guardião de Chaves{% endblock %}
+
+{% block content %}
+
+<section class="titulo-pagina">
+    <h2>Chaves cadastradas</h2>
+    <p>Consulte a situação atual das chaves no sistema.</p>
+</section>
+
+<form method="GET" class="filtro">
+    <input 
+        type="text" 
+        name="busca" 
+        placeholder="Buscar por código, local ou status..." 
+        value="{{ busca }}"
+    >
+    <button type="submit" class="btn btn-principal">Buscar</button>
+    <a href="{{ url_for('cadastrar_chave') }}" class="btn btn-secundario">Nova chave</a>
+</form>
+
+<section class="tabela-box">
+    <table>
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Local</th>
+                <th>Descrição</th>
+                <th>Status</th>
+                <th>Cadastrada em</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for chave in chaves %}
+            <tr>
+                <td><strong>{{ chave.codigo }}</strong></td>
+                <td>{{ chave.local }}</td>
+                <td>{{ chave.descricao or "-" }}</td>
+                <td>
+                    {% if chave.status == "Disponível" %}
+                        <span class="status disponivel">Disponível</span>
+                    {% elif chave.status == "Retirada" %}
+                        <span class="status retirada">Retirada</span>
+                    {% else %}
+                        <span class="status">{{ chave.status }}</span>
+                    {% endif %}
+                </td>
+                <td>{{ chave.criado_em }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5">Nenhuma chave cadastrada.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+
+{% endblock %}
