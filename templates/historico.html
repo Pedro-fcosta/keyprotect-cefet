@@ -9,48 +9,30 @@
     <p>Consulte retiradas, devoluções e movimentações em aberto.</p>
 </section>
 
-<form method="GET" class="filtro">
-    <input 
-        type="text" 
-        name="busca" 
-        placeholder="Buscar por nome, matrícula, chave, local ou status..." 
-        value="{{ busca }}"
-    >
+<section class="filtro-box">
+    <form method="GET" class="filtro">
+        <input 
+            type="text" 
+            name="busca" 
+            placeholder="Buscar por nome, matrícula, chave, local ou status..." 
+            value="{{ busca }}"
+        >
 
-    <button type="submit" class="btn btn-principal">Buscar</button>
+        <button type="submit" class="btn btn-principal">Buscar</button>
+        <a href="{{ url_for('historico') }}" class="btn btn-secundario">Limpar</a>
+        <a href="{{ url_for('exportar_historico') }}" class="btn btn-principal">Exportar CSV</a>
+    </form>
+</section>
 
-    <a href="{{ url_for('historico') }}" class="btn btn-secundario">Limpar</a>
+<section class="historico-lista">
+    {% for mov in movimentacoes %}
+        <article class="historico-card">
+            <div class="historico-topo">
+                <div>
+                    <h3>{{ mov.codigo }} <span class="historico-local">| {{ mov.local }}</span></h3>
+                </div>
 
-    <a href="{{ url_for('exportar_historico') }}" class="btn btn-principal">Exportar CSV</a>
-</form>
-
-<section class="tabela-box">
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Chave</th>
-                <th>Local</th>
-                <th>Responsável</th>
-                <th>Matrícula</th>
-                <th>Retirada</th>
-                <th>Devolução</th>
-                <th>Status</th>
-                <th>Observação</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            {% for mov in movimentacoes %}
-            <tr>
-                <td>{{ mov.id }}</td>
-                <td><strong>{{ mov.codigo }}</strong></td>
-                <td>{{ mov.local }}</td>
-                <td>{{ mov.nome }}</td>
-                <td>{{ mov.matricula }}</td>
-                <td>{{ mov.data_retirada }}</td>
-                <td>{{ mov.data_devolucao or "-" }}</td>
-                <td>
+                <div>
                     {% if mov.status == "Em aberto" %}
                         <span class="status aberto">Em aberto</span>
                     {% elif mov.status == "Finalizada" %}
@@ -58,16 +40,51 @@
                     {% else %}
                         <span class="status">{{ mov.status }}</span>
                     {% endif %}
-                </td>
-                <td>{{ mov.observacao or "-" }}</td>
-            </tr>
-            {% else %}
-            <tr>
-                <td colspan="9">Nenhuma movimentação encontrada.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                </div>
+            </div>
+
+            <div class="historico-grid">
+                <div class="historico-item">
+                    <span class="historico-label">Quem retirou</span>
+                    <strong>{{ mov.nome_retirada }}</strong>
+                </div>
+
+                <div class="historico-item">
+                    <span class="historico-label">Matrícula retirada</span>
+                    <strong>{{ mov.matricula_retirada }}</strong>
+                </div>
+
+                <div class="historico-item">
+                    <span class="historico-label">Quem devolveu</span>
+                    <strong>{{ mov.nome_devolucao or "-" }}</strong>
+                </div>
+
+                <div class="historico-item">
+                    <span class="historico-label">Matrícula devolução</span>
+                    <strong>{{ mov.matricula_devolucao or "-" }}</strong>
+                </div>
+
+                <div class="historico-item">
+                    <span class="historico-label">Data da retirada</span>
+                    <strong>{{ mov.data_retirada }}</strong>
+                </div>
+
+                <div class="historico-item">
+                    <span class="historico-label">Data da devolução</span>
+                    <strong>{{ mov.data_devolucao or "-" }}</strong>
+                </div>
+            </div>
+
+            <div class="historico-observacao">
+                <span class="historico-label">Observação</span>
+                <p>{{ mov.observacao or "Sem observações." }}</p>
+            </div>
+        </article>
+    {% else %}
+        <section class="form-box">
+            <p>Nenhuma movimentação encontrada.</p>
+        </section>
+    {% endfor %}
 </section>
 
 {% endblock %}

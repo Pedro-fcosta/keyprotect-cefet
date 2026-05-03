@@ -16,13 +16,16 @@
 <section class="tabela-box">
     <table>
         <thead>
-            <tr>
-                <th>Matrícula</th>
-                <th>Nome</th>
-                <th>Curso/Setor</th>
-                <th>Telefone</th>
-                <th>Cadastrado em</th>
-            </tr>
+            <thead>
+                <tr>
+                    <th>Matrícula</th>
+                    <th>Nome</th>
+                    <th>Tipo</th>
+                    <th>Curso/Área</th>
+                    <th>Telefone</th>
+                    <th>Cadastrado em</th>
+                </tr>
+            </thead>
         </thead>
 
         <tbody>
@@ -30,13 +33,14 @@
             <tr>
                 <td><strong>{{ usuario.matricula }}</strong></td>
                 <td>{{ usuario.nome }}</td>
+                <td>{{ usuario.tipo_usuario or "-" }}</td>
                 <td>{{ usuario.curso_setor or "-" }}</td>
                 <td>{{ usuario.telefone or "-" }}</td>
                 <td>{{ usuario.criado_em }}</td>
             </tr>
             {% else %}
             <tr>
-                <td colspan="5">Nenhum usuário cadastrado.</td>
+                <td colspan="6">Nenhum usuário cadastrado.</td>
             </tr>
             {% endfor %}
         </tbody>

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Confirmar devolução | Guardião de Chaves{% endblock %}
+
+{% block content %}
+
+<section class="titulo-pagina">
+    <h2>Confirmar devolução</h2>
+    <p>A matrícula informada não pertence à pessoa que retirou a chave.</p>
+</section>
+
+<section class="form-box">
+    <div class="aviso-confirmacao">
+        <h3>Não foi esta pessoa que retirou a chave. Deseja continuar?</h3>
+
+        <p>
+            A chave <strong>{{ movimentacao.codigo }}</strong>, referente ao local 
+            <strong>{{ movimentacao.local }}</strong>, foi retirada por:
+        </p>
+
+        <div class="info-confirmacao">
+            <div>
+                <span>Quem retirou</span>
+                <strong>{{ movimentacao.nome_retirada }}</strong>
+            </div>
+
+            <div>
+                <span>Matrícula de quem retirou</span>
+                <strong>{{ movimentacao.matricula_retirada }}</strong>
+            </div>
+
+            <div>
+                <span>Quem está devolvendo</span>
+                <strong>{{ usuario_devolucao.nome }}</strong>
+            </div>
+
+            <div>
+                <span>Matrícula de quem devolve</span>
+                <strong>{{ usuario_devolucao.matricula }}</strong>
+            </div>
+        </div>
+
+        <form method="POST" action="{{ url_for('devolucao') }}">
+            <input type="hidden" name="movimentacao_id" value="{{ movimentacao.id }}">
+            <input type="hidden" name="matricula_devolucao" value="{{ usuario_devolucao.matricula }}">
+            <input type="hidden" name="confirmar_devolucao" value="sim">
+
+            <div class="botoes">
+                <button type="submit" class="btn btn-principal">Sim, continuar devolução</button>
+                <a href="{{ url_for('devolucao') }}" class="btn btn-secundario">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</section>
+
+{% endblock %}

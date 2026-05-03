@@ -6,36 +6,58 @@
 
 <section class="titulo-pagina">
     <h2>Retirada de chave</h2>
-    <p>Registre a retirada de uma chave disponível por um usuário cadastrado.</p>
+    <p>Selecione uma chave disponível e registre a retirada por um usuário cadastrado.</p>
 </section>
 
 <section class="form-box">
-    <form method="POST">
+    <form method="POST" id="form-retirada">
 
-        <div class="form-grid">
-            <div class="campo">
-                <label for="matricula">Matrícula do usuário</label>
-                <input 
-                    type="text" 
-                    id="matricula" 
-                    name="matricula" 
-                    placeholder="Digite a matrícula do responsável"
-                    required
-                >
+        <div class="campo">
+            <label for="matricula">Matrícula do usuário</label>
+            <input 
+                type="text" 
+                id="matricula" 
+                name="matricula" 
+                placeholder="Digite a matrícula do responsável"
+                required
+            >
+        </div>
+
+        <div class="campo">
+            <label>Selecione a chave</label>
+
+            <div class="legenda-chaves">
+                <span><span class="bolinha disponivel"></span> Disponível</span>
+                <span><span class="bolinha retirada"></span> Retirada</span>
+                <span><span class="bolinha selecionada"></span> Selecionada</span>
             </div>
 
-            <div class="campo">
-                <label for="chave_id">Chave disponível</label>
-                <select id="chave_id" name="chave_id" required>
-                    <option value="">Selecione uma chave</option>
-
-                    {% for chave in chaves %}
-                        <option value="{{ chave.id }}">
-                            {{ chave.codigo }} - {{ chave.local }}
-                        </option>
-                    {% endfor %}
-                </select>
+            <div class="mapa-chaves">
+                {% for chave in chaves %}
+                    {% if chave.status == "Disponível" %}
+                        <button 
+                            type="button"
+                            class="chave-card chave-disponivel"
+                            data-id="{{ chave.id }}"
+                            onclick="selecionarChave(this)"
+                        >
+                            <div class="chave-local">{{ chave.local }}</div>
+                            <div class="chave-codigo">{{ chave.codigo }}</div>
+                        </button>
+                    {% else %}
+                        <button 
+                            type="button"
+                            class="chave-card chave-retirada"
+                            disabled
+                        >
+                            <div class="chave-local">{{ chave.local }}</div>
+                            <div class="chave-codigo">{{ chave.codigo }}</div>
+                        </button>
+                    {% endif %}
+                {% endfor %}
             </div>
+
+            <input type="hidden" id="chave_id" name="chave_id" required>
         </div>
 
         <div class="campo">
@@ -57,10 +79,32 @@
 
 {% if not chaves %}
     <section class="form-box" style="margin-top: 18px;">
-        <p>
-            Nenhuma chave disponível no momento. Cadastre uma nova chave ou verifique as devoluções pendentes.
-        </p>
+        <p>Nenhuma chave cadastrada no sistema.</p>
     </section>
 {% endif %}
+
+<script>
+    function selecionarChave(botao) {
+        const chaveId = botao.getAttribute("data-id");
+        const inputChave = document.getElementById("chave_id");
+
+        const todasChaves = document.querySelectorAll(".chave-card");
+        todasChaves.forEach(chave => {
+            chave.classList.remove("chave-selecionada");
+        });
+
+        botao.classList.add("chave-selecionada");
+        inputChave.value = chaveId;
+    }
+
+    document.getElementById("form-retirada").addEventListener("submit", function(event) {
+        const chaveSelecionada = document.getElementById("chave_id").value;
+
+        if (!chaveSelecionada) {
+            event.preventDefault();
+            alert("Selecione uma chave disponível antes de registrar a retirada.");
+        }
+    });
+</script>
 
 {% endblock %}

@@ -6,7 +6,7 @@
 
 <section class="titulo-pagina">
     <h2>Cadastrar usuário</h2>
-    <p>Inclua um aluno, servidor ou responsável autorizado a retirar chaves.</p>
+    <p>Inclua um aluno, professor, técnico ou funcionário autorizado a retirar chaves.</p>
 </section>
 
 <section class="form-box">
@@ -24,8 +24,14 @@
             </div>
 
             <div class="campo">
-                <label for="curso_setor">Curso/Setor</label>
-                <input type="text" id="curso_setor" name="curso_setor" placeholder="Ex: Engenharia Mecânica">
+                <label for="tipo_usuario">Tipo de usuário</label>
+                <select id="tipo_usuario" name="tipo_usuario" required onchange="atualizarCampos()">
+                    <option value="">Selecione</option>
+                    <option value="Aluno">Aluno</option>
+                    <option value="Professor">Professor</option>
+                    <option value="Técnico">Técnico</option>
+                    <option value="Funcionário">Funcionário</option>
+                </select>
             </div>
 
             <div class="campo">
@@ -34,6 +40,28 @@
             </div>
         </div>
 
+        <div class="campo" id="campo_aluno" style="display: none;">
+            <label for="curso_aluno">Curso</label>
+            <select id="curso_aluno">
+                <option value="">Selecione o curso</option>
+                <option value="Engenharia Mecânica">Engenharia Mecânica</option>
+                <option value="Engenharia de Produção">Engenharia de Produção</option>
+                <option value="Técnico em Mecânica">Técnico em Mecânica</option>
+                <option value="Técnico em Automação">Técnico em Automação</option>
+            </select>
+        </div>
+
+        <div class="campo" id="campo_professor" style="display: none;">
+            <label for="ensino_professor">Área de atuação</label>
+            <select id="ensino_professor">
+                <option value="">Selecione</option>
+                <option value="Ensino Superior">Ensino Superior</option>
+                <option value="Ensino Técnico">Ensino Técnico</option>
+            </select>
+        </div>
+
+        <input type="hidden" id="curso_setor" name="curso_setor">
+
         <div class="botoes">
             <button type="submit" class="btn btn-principal">Cadastrar usuário</button>
             <a href="{{ url_for('usuarios') }}" class="btn btn-secundario">Voltar</a>
@@ -41,5 +69,51 @@
 
     </form>
 </section>
+
+<script>
+    function atualizarCampos() {
+        const tipoUsuario = document.getElementById("tipo_usuario").value;
+
+        const campoAluno = document.getElementById("campo_aluno");
+        const campoProfessor = document.getElementById("campo_professor");
+
+        const cursoAluno = document.getElementById("curso_aluno");
+        const ensinoProfessor = document.getElementById("ensino_professor");
+        const cursoSetor = document.getElementById("curso_setor");
+
+        campoAluno.style.display = "none";
+        campoProfessor.style.display = "none";
+
+        cursoAluno.required = false;
+        ensinoProfessor.required = false;
+
+        cursoAluno.value = "";
+        ensinoProfessor.value = "";
+        cursoSetor.value = "";
+
+        if (tipoUsuario === "Aluno") {
+            campoAluno.style.display = "flex";
+            cursoAluno.required = true;
+        }
+
+        if (tipoUsuario === "Professor") {
+            campoProfessor.style.display = "flex";
+            ensinoProfessor.required = true;
+        }
+    }
+
+    document.querySelector("form").addEventListener("submit", function() {
+        const tipoUsuario = document.getElementById("tipo_usuario").value;
+        const cursoSetor = document.getElementById("curso_setor");
+
+        if (tipoUsuario === "Aluno") {
+            cursoSetor.value = document.getElementById("curso_aluno").value;
+        } else if (tipoUsuario === "Professor") {
+            cursoSetor.value = document.getElementById("ensino_professor").value;
+        } else {
+            cursoSetor.value = "";
+        }
+    });
+</script>
 
 {% endblock %}

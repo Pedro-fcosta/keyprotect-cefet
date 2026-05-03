@@ -6,7 +6,7 @@
 
 <section class="titulo-pagina">
     <h2>Devolução de chave</h2>
-    <p>Finalize uma retirada em aberto e libere a chave para novo uso.</p>
+    <p>Informe a matrícula de quem está devolvendo e finalize uma retirada em aberto.</p>
 </section>
 
 {% if movimentacoes %}
@@ -17,9 +17,10 @@
             <tr>
                 <th>Chave</th>
                 <th>Local</th>
-                <th>Responsável</th>
-                <th>Matrícula</th>
+                <th>Quem retirou</th>
+                <th>Matrícula retirada</th>
                 <th>Data da retirada</th>
+                <th>Matrícula de quem devolve</th>
                 <th>Ação</th>
             </tr>
         </thead>
@@ -33,8 +34,18 @@
                 <td>{{ mov.matricula }}</td>
                 <td>{{ mov.data_retirada }}</td>
                 <td>
-                    <form method="POST" style="margin: 0;">
+                    <form method="POST" class="form-devolucao-linha">
                         <input type="hidden" name="movimentacao_id" value="{{ mov.id }}">
+
+                        <input 
+                            type="text" 
+                            name="matricula_devolucao" 
+                            placeholder="Matrícula"
+                            required
+                            class="input-tabela"
+                        >
+                </td>
+                <td>
                         <button type="submit" class="btn btn-principal">
                             Devolver
                         </button>

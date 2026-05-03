@@ -35,11 +35,19 @@ def criar_tabelas():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             matricula TEXT NOT NULL UNIQUE,
             nome TEXT NOT NULL,
+            tipo_usuario TEXT,
             curso_setor TEXT,
             telefone TEXT,
             criado_em TEXT NOT NULL
         )
     """)
+
+    # Garante que bancos antigos também tenham a coluna tipo_usuario
+    colunas_usuarios = cursor.execute("PRAGMA table_info(usuarios)").fetchall()
+    nomes_colunas = [coluna[1] for coluna in colunas_usuarios]
+
+    if "tipo_usuario" not in nomes_colunas:
+        cursor.execute("ALTER TABLE usuarios ADD COLUMN tipo_usuario TEXT")
 
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS chaves (
@@ -57,17 +65,23 @@ def criar_tabelas():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             usuario_id INTEGER NOT NULL,
             chave_id INTEGER NOT NULL,
+            usuario_devolucao_id INTEGER,
             data_retirada TEXT NOT NULL,
             data_devolucao TEXT,
             status TEXT NOT NULL DEFAULT 'Em aberto',
             observacao TEXT,
             FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
+            FOREIGN KEY (usuario_devolucao_id) REFERENCES usuarios(id),
             FOREIGN KEY (chave_id) REFERENCES chaves(id)
         )
     """)
 
-    conexao.commit()
-    conexao.close()
+    # Garante que bancos antigos também tenham a coluna usuario_devolucao_id
+    colunas_movimentacoes = cursor.execute("PRAGMA table_info(movimentacoes)").fetchall()
+    nomes_colunas_mov = [coluna[1] for coluna in colunas_movimentacoes]
+
+    if "usuario_devolucao_id" not in nomes_colunas_mov:
+        cursor.execute("ALTER TABLE movimentacoes ADD COLUMN usuario_devolucao_id INTEGER")
 
 
 # =========================
@@ -116,21 +130,42 @@ def cadastrar_usuario():
     if request.method == "POST":
         matricula = request.form["matricula"].strip()
         nome = request.form["nome"].strip()
-        curso_setor = request.form["curso_setor"].strip()
+        tipo_usuario = request.form["tipo_usuario"].strip()
+        curso_setor = request.form.get("curso_setor", "").strip()
         telefone = request.form["telefone"].strip()
         criado_em = datetime.now().strftime("%d/%m/%Y %H:%M")
 
-        if not matricula or not nome:
-            flash("Matrícula e nome são obrigatórios.", "erro")
+        if not matricula or not nome or not tipo_usuario:
+            flash("Matrícula, nome e tipo de usuário são obrigatórios.", "erro")
             return redirect(url_for("cadastrar_usuario"))
+
+        if tipo_usuario == "Aluno" and not curso_setor:
+            flash("Para aluno, o curso é obrigatório.", "erro")
+            return redirect(url_for("cadastrar_usuario"))
+
+        if tipo_usuario == "Professor" and not curso_setor:
+            flash("Para professor, o tipo de ensino é obrigatório.", "erro")
+            return redirect(url_for("cadastrar_usuario"))
+
+        if tipo_usuario in ["Técnico", "Funcionário"]:
+            curso_setor = ""
 
         conexao = conectar_banco()
 
         try:
             conexao.execute("""
-                INSERT INTO usuarios (matricula, nome, curso_setor, telefone, criado_em)
-                VALUES (?, ?, ?, ?, ?)
-            """, (matricula, nome, curso_setor, telefone, criado_em))
+                INSERT INTO usuarios (
+                    matricula, nome, tipo_usuario, curso_setor, telefone, criado_em
+                )
+                VALUES (?, ?, ?, ?, ?, ?)
+            """, (
+                matricula,
+                nome,
+                tipo_usuario,
+                curso_setor,
+                telefone,
+                criado_em
+            ))
 
             conexao.commit()
             flash("Usuário cadastrado com sucesso.", "sucesso")
@@ -176,28 +211,40 @@ def chaves():
 @app.route("/chaves/cadastrar", methods=["GET", "POST"])
 def cadastrar_chave():
     if request.method == "POST":
-        codigo = request.form["codigo"].strip()
         local = request.form["local"].strip()
         descricao = request.form["descricao"].strip()
         criado_em = datetime.now().strftime("%d/%m/%Y %H:%M")
 
-        if not codigo or not local:
-            flash("Código da chave e local são obrigatórios.", "erro")
+        if not local:
+            flash("Local da chave é obrigatório.", "erro")
             return redirect(url_for("cadastrar_chave"))
 
         conexao = conectar_banco()
+        cursor = conexao.cursor()
 
         try:
-            conexao.execute("""
+            # Primeiro cadastra a chave sem código definitivo
+            cursor.execute("""
                 INSERT INTO chaves (codigo, local, descricao, status, criado_em)
                 VALUES (?, ?, ?, ?, ?)
-            """, (codigo, local, descricao, "Disponível", criado_em))
+            """, ("TEMP", local, descricao, "Disponível", criado_em))
+
+            chave_id = cursor.lastrowid
+
+            # Depois gera o código sequencial baseado no ID automático
+            codigo = f"CH-{chave_id:03d}"
+
+            cursor.execute("""
+                UPDATE chaves
+                SET codigo = ?
+                WHERE id = ?
+            """, (codigo, chave_id))
 
             conexao.commit()
-            flash("Chave cadastrada com sucesso.", "sucesso")
+            flash(f"Chave cadastrada com sucesso. Código gerado: {codigo}", "sucesso")
 
         except sqlite3.IntegrityError:
-            flash("Já existe uma chave com esse código.", "erro")
+            flash("Erro ao cadastrar chave. Tente novamente.", "erro")
 
         finally:
             conexao.close()
@@ -272,16 +319,16 @@ def retirada():
         flash("Retirada registrada com sucesso.", "sucesso")
         return redirect(url_for("index"))
 
-    chaves_disponiveis = conexao.execute("""
+    # Essa parte fica FORA do if POST.
+    # Ela roda quando a página é aberta pelo navegador usando GET.
+    chaves = conexao.execute("""
         SELECT * FROM chaves
-        WHERE status = 'Disponível'
         ORDER BY codigo ASC
     """).fetchall()
 
     conexao.close()
 
-    return render_template("retirada.html", chaves=chaves_disponiveis)
-
+    return render_template("retirada.html", chaves=chaves)
 
 # =========================
 # DEVOLUÇÃO DE CHAVE
@@ -293,11 +340,26 @@ def devolucao():
 
     if request.method == "POST":
         movimentacao_id = request.form["movimentacao_id"]
+        matricula_devolucao = request.form["matricula_devolucao"].strip()
+        confirmar_devolucao = request.form.get("confirmar_devolucao", "nao")
         data_devolucao = datetime.now().strftime("%d/%m/%Y %H:%M")
 
+        if not matricula_devolucao:
+            conexao.close()
+            flash("Informe a matrícula de quem está devolvendo a chave.", "erro")
+            return redirect(url_for("devolucao"))
+
         movimentacao = conexao.execute("""
-            SELECT * FROM movimentacoes
-            WHERE id = ? AND status = 'Em aberto'
+            SELECT 
+                movimentacoes.*,
+                usuarios.nome AS nome_retirada,
+                usuarios.matricula AS matricula_retirada,
+                chaves.codigo,
+                chaves.local
+            FROM movimentacoes
+            JOIN usuarios ON movimentacoes.usuario_id = usuarios.id
+            JOIN chaves ON movimentacoes.chave_id = chaves.id
+            WHERE movimentacoes.id = ? AND movimentacoes.status = 'Em aberto'
         """, (movimentacao_id,)).fetchone()
 
         if not movimentacao:
@@ -305,11 +367,38 @@ def devolucao():
             flash("Movimentação em aberto não encontrada.", "erro")
             return redirect(url_for("devolucao"))
 
+        usuario_devolucao = conexao.execute("""
+            SELECT * FROM usuarios
+            WHERE matricula = ?
+        """, (matricula_devolucao,)).fetchone()
+
+        if not usuario_devolucao:
+            conexao.close()
+            flash("Usuário não encontrado. Cadastre o usuário antes de registrar a devolução.", "erro")
+            return redirect(url_for("cadastrar_usuario"))
+
+        mesma_pessoa = usuario_devolucao["id"] == movimentacao["usuario_id"]
+
+        if not mesma_pessoa and confirmar_devolucao != "sim":
+            conexao.close()
+            return render_template(
+                "confirmar_devolucao.html",
+                movimentacao=movimentacao,
+                usuario_devolucao=usuario_devolucao
+            )
+
         conexao.execute("""
             UPDATE movimentacoes
-            SET data_devolucao = ?, status = 'Finalizada'
+            SET 
+                data_devolucao = ?, 
+                status = 'Finalizada',
+                usuario_devolucao_id = ?
             WHERE id = ?
-        """, (data_devolucao, movimentacao_id))
+        """, (
+            data_devolucao,
+            usuario_devolucao["id"],
+            movimentacao_id
+        ))
 
         conexao.execute("""
             UPDATE chaves
@@ -353,23 +442,37 @@ def historico():
 
     conexao = conectar_banco()
 
+    sql_base = """
+        SELECT 
+            movimentacoes.id,
+            movimentacoes.data_retirada,
+            movimentacoes.data_devolucao,
+            movimentacoes.status,
+            movimentacoes.observacao,
+
+            usuario_retirada.nome AS nome_retirada,
+            usuario_retirada.matricula AS matricula_retirada,
+
+            usuario_devolucao.nome AS nome_devolucao,
+            usuario_devolucao.matricula AS matricula_devolucao,
+
+            chaves.codigo,
+            chaves.local
+        FROM movimentacoes
+        JOIN usuarios AS usuario_retirada 
+            ON movimentacoes.usuario_id = usuario_retirada.id
+        LEFT JOIN usuarios AS usuario_devolucao 
+            ON movimentacoes.usuario_devolucao_id = usuario_devolucao.id
+        JOIN chaves 
+            ON movimentacoes.chave_id = chaves.id
+    """
+
     if busca:
-        movimentacoes = conexao.execute("""
-            SELECT 
-                movimentacoes.id,
-                movimentacoes.data_retirada,
-                movimentacoes.data_devolucao,
-                movimentacoes.status,
-                movimentacoes.observacao,
-                usuarios.nome,
-                usuarios.matricula,
-                chaves.codigo,
-                chaves.local
-            FROM movimentacoes
-            JOIN usuarios ON movimentacoes.usuario_id = usuarios.id
-            JOIN chaves ON movimentacoes.chave_id = chaves.id
-            WHERE usuarios.nome LIKE ?
-               OR usuarios.matricula LIKE ?
+        movimentacoes = conexao.execute(sql_base + """
+            WHERE usuario_retirada.nome LIKE ?
+               OR usuario_retirada.matricula LIKE ?
+               OR usuario_devolucao.nome LIKE ?
+               OR usuario_devolucao.matricula LIKE ?
                OR chaves.codigo LIKE ?
                OR chaves.local LIKE ?
                OR movimentacoes.status LIKE ?
@@ -379,30 +482,18 @@ def historico():
             f"%{busca}%",
             f"%{busca}%",
             f"%{busca}%",
+            f"%{busca}%",
+            f"%{busca}%",
             f"%{busca}%"
         )).fetchall()
     else:
-        movimentacoes = conexao.execute("""
-            SELECT 
-                movimentacoes.id,
-                movimentacoes.data_retirada,
-                movimentacoes.data_devolucao,
-                movimentacoes.status,
-                movimentacoes.observacao,
-                usuarios.nome,
-                usuarios.matricula,
-                chaves.codigo,
-                chaves.local
-            FROM movimentacoes
-            JOIN usuarios ON movimentacoes.usuario_id = usuarios.id
-            JOIN chaves ON movimentacoes.chave_id = chaves.id
+        movimentacoes = conexao.execute(sql_base + """
             ORDER BY movimentacoes.id DESC
         """).fetchall()
 
     conexao.close()
 
     return render_template("historico.html", movimentacoes=movimentacoes, busca=busca)
-
 
 # =========================
 # DASHBOARD
