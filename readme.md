@@ -1233,8 +1233,6 @@ Nome 5 -
 
 # Professor
 
-Preencher com o nome do professor:
-
 ```text
 Professor: HARON CALEGARI FANTICELLI
 ```
