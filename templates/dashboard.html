@@ -6,177 +6,347 @@
 
 <section class="titulo-pagina">
     <h2>Dashboard</h2>
-    <p>Indicadores gerais do controle de chaves.</p>
+    <p>Indicadores gerais do sistema de controle de chaves.</p>
 </section>
 
-<section class="cards">
-    <div class="card">
-        <h3>Total de chaves</h3>
-        <div class="numero">{{ total_chaves }}</div>
+
+<section class="dashboard-filtros">
+    <div class="dashboard-filtros-botoes">
+        <a href="{{ url_for('dashboard', periodo='1d') }}"
+           class="filtro-periodo {% if periodo == '1d' %}ativo{% endif %}">
+            1 dia
+        </a>
+
+        <a href="{{ url_for('dashboard', periodo='7d') }}"
+           class="filtro-periodo {% if periodo == '7d' %}ativo{% endif %}">
+            7 dias
+        </a>
+
+        <a href="{{ url_for('dashboard', periodo='1m') }}"
+           class="filtro-periodo {% if periodo == '1m' %}ativo{% endif %}">
+            1 mês
+        </a>
+
+        <a href="{{ url_for('dashboard', periodo='6m') }}"
+           class="filtro-periodo {% if periodo == '6m' %}ativo{% endif %}">
+            6 meses
+        </a>
     </div>
 
-    <div class="card">
-        <h3>Disponíveis</h3>
-        <div class="numero">{{ chaves_disponiveis }}</div>
-    </div>
-
-    <div class="card">
-        <h3>Retiradas</h3>
-        <div class="numero">{{ chaves_retiradas }}</div>
-    </div>
-
-    <div class="card">
-        <h3>Movimentos abertos</h3>
-        <div class="numero">{{ movimentos_abertos }}</div>
-    </div>
+    <a href="{{ url_for('exportar_dashboard_pdf', periodo=periodo) }}" class="btn btn-principal">
+        Exportar Dashboard PDF
+    </a>
 </section>
 
-<section class="cards">
-    <div class="card">
-        <h3>Usuários cadastrados</h3>
-        <div class="numero">{{ total_usuarios }}</div>
-    </div>
+<p class="dashboard-periodo-atual">
+    Período atual: <strong>{{ periodo_label }}</strong>
+</p>
 
-    <div class="card">
-        <h3>Total de movimentações</h3>
-        <div class="numero">{{ total_movimentacoes }}</div>
-    </div>
+
+<!-- KPIs -->
+<section class="dashboard-kpis">
+    <article class="kpi-card">
+        <span class="kpi-label">Total de chaves</span>
+        <strong class="kpi-value">{{ total_chaves }}</strong>
+    </article>
+
+    <article class="kpi-card">
+        <span class="kpi-label">Chaves disponíveis</span>
+        <strong class="kpi-value">{{ chaves_disponiveis }}</strong>
+    </article>
+
+    <article class="kpi-card">
+        <span class="kpi-label">Chaves retiradas</span>
+        <strong class="kpi-value">{{ chaves_retiradas }}</strong>
+    </article>
+
+    <article class="kpi-card">
+        <span class="kpi-label">Movimentos em aberto</span>
+        <strong class="kpi-value">{{ movimentos_abertos }}</strong>
+    </article>
+
+    <article class="kpi-card">
+        <span class="kpi-label">Usuários cadastrados</span>
+        <strong class="kpi-value">{{ total_usuarios }}</strong>
+    </article>
+
+    <article class="kpi-card">
+        <span class="kpi-label">Total de movimentações</span>
+        <strong class="kpi-value">{{ total_movimentacoes }}</strong>
+    </article>
+
+    <article class="kpi-card">
+        <span class="kpi-label">Tempo médio de devolução</span>
+        <strong class="kpi-value kpi-value-small">{{ tempo_medio_devolucao }}</strong>
+    </article>
+
+    <article class="kpi-card">
+        <span class="kpi-label">Em aberto há mais de 24h</span>
+        <strong class="kpi-value">{{ devolucoes_atrasadas }}</strong>
+    </article>
 </section>
 
-<section class="dashboard-grid">
+<!-- Insights rápidos -->
+<section class="dashboard-insights">
+    <article class="insight-card">
+        <span class="insight-label">Chave mais utilizada</span>
+        <strong class="insight-value">{{ chave_mais_utilizada }}</strong>
+    </article>
 
-    <div class="tabela-box">
-        <h3 class="subtitulo-tabela">Últimas movimentações</h3>
+    <article class="insight-card">
+        <span class="insight-label">Usuário com mais retiradas</span>
+        <strong class="insight-value">{{ usuario_mais_ativo }}</strong>
+    </article>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Chave</th>
-                    <th>Responsável</th>
-                    <th>Retirada</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                {% for mov in ultimas_movimentacoes %}
-                <tr>
-                    <td><strong>{{ mov.codigo }}</strong></td>
-                    <td>{{ mov.nome }}</td>
-                    <td>{{ mov.data_retirada }}</td>
-                    <td>
-                        {% if mov.status == "Em aberto" %}
-                            <span class="status aberto">Em aberto</span>
-                        {% elif mov.status == "Finalizada" %}
-                            <span class="status finalizada">Finalizada</span>
-                        {% else %}
-                            <span class="status">{{ mov.status }}</span>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% else %}
-                <tr>
-                    <td colspan="4">Nenhuma movimentação registrada.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-
-<section class="tabela-box indicador-alerta">
-    <h3 class="subtitulo-tabela">Chave há mais tempo sem devolução</h3>
-
-    {% if chave_mais_tempo_aberta %}
-        <div class="alerta-chave">
-            <div>
-                <span class="label-indicador">Chave</span>
-                <strong>{{ chave_mais_tempo_aberta.codigo }}</strong>
-            </div>
-
-            <div>
-                <span class="label-indicador">Local</span>
-                <strong>{{ chave_mais_tempo_aberta.local }}</strong>
-            </div>
-
-            <div>
-                <span class="label-indicador">Responsável</span>
-                <strong>{{ chave_mais_tempo_aberta.nome }}</strong>
-            </div>
-
-            <div>
-                <span class="label-indicador">Tempo em aberto</span>
-                <strong>
-                    {{ chave_mais_tempo_aberta.dias_aberto }} dia(s) e 
-                    {{ chave_mais_tempo_aberta.horas_aberto }} hora(s)
-                </strong>
-            </div>
-
-            <div>
-                <span class="label-indicador">Data da retirada</span>
-                <strong>{{ chave_mais_tempo_aberta.data_retirada }}</strong>
-            </div>
-        </div>
-    {% else %}
-        <p>Nenhuma chave pendente de devolução no momento.</p>
-    {% endif %}
-</section>
-
-    <div class="tabela-box">
-        <h3 class="subtitulo-tabela">Chaves mais utilizadas</h3>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>Chave</th>
-                    <th>Local</th>
-                    <th>Usos</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                {% for chave in chaves_mais_utilizadas %}
-                <tr>
-                    <td><strong>{{ chave.codigo }}</strong></td>
-                    <td>{{ chave.local }}</td>
-                    <td>{{ chave.total_usos }}</td>
-                </tr>
-                {% else %}
-                <tr>
-                    <td colspan="3">Nenhum dado disponível.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-
-</section>
-
-<section class="tabela-box" style="margin-top: 20px;">
-    <h3 class="subtitulo-tabela">Usuários com mais retiradas</h3>
-
-    <table>
-        <thead>
-            <tr>
-                <th>Responsável</th>
-                <th>Matrícula</th>
-                <th>Total de retiradas</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            {% for usuario in usuarios_mais_ativos %}
-            <tr>
-                <td>{{ usuario.nome }}</td>
-                <td>{{ usuario.matricula }}</td>
-                <td>{{ usuario.total_retiradas }}</td>
-            </tr>
+    <article class="insight-card">
+        <span class="insight-label">Maior pendência em aberto</span>
+        <strong class="insight-value">
+            {% if chave_mais_tempo_sem_devolucao %}
+                {{ chave_mais_tempo_sem_devolucao.codigo }} - {{ chave_mais_tempo_sem_devolucao.local }}
             {% else %}
-            <tr>
-                <td colspan="3">Nenhum dado disponível.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                Nenhuma
+            {% endif %}
+        </strong>
+    </article>
 </section>
+
+<!-- Gráficos -->
+<section class="dashboard-graficos">
+    <article class="grafico-card">
+        <div class="grafico-header">
+            <h3>Situação das chaves</h3>
+        </div>
+        <canvas id="graficoStatusChaves"></canvas>
+    </article>
+
+    <article class="grafico-card">
+        <div class="grafico-header">
+            <h3>Top 5 Chaves mais utilizadas</h3>
+        </div>
+        <canvas id="graficoTopChaves"></canvas>
+    </article>
+
+    <article class="grafico-card">
+        <div class="grafico-header">
+            <h3>Top 5 Usuários com mais retiradas</h3>
+        </div>
+        <canvas id="graficoTopUsuarios"></canvas>
+    </article>
+
+    <article class="grafico-card">
+        <div class="grafico-header">
+            <h3>Retiradas por dia</h3>
+        </div>
+        <canvas id="graficoRetiradasDia"></canvas>
+    </article>
+</section>
+
+<!-- Tabelas -->
+<section class="dashboard-tabelas">
+    <article class="dashboard-box">
+        <div class="box-header">
+            <h3>Últimas movimentações</h3>
+        </div>
+
+        <div class="tabela-responsiva">
+            <table class="tabela-dashboard">
+                <thead>
+                    <tr>
+                        <th>Chave</th>
+                        <th>Local</th>
+                        <th>Responsável</th>
+                        <th>Retirada</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for mov in ultimas_movimentacoes %}
+                        <tr>
+                            <td>{{ mov.codigo }}</td>
+                            <td>{{ mov.local }}</td>
+                            <td>{{ mov.responsavel }}</td>
+                            <td>{{ mov.retirada }}</td>
+                            <td>
+                                {% if mov.status == "Em aberto" %}
+                                    <span class="status aberto">Em aberto</span>
+                                {% elif mov.status == "Finalizada" %}
+                                    <span class="status finalizada">Finalizada</span>
+                                {% else %}
+                                    <span class="status">{{ mov.status }}</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="5">Nenhuma movimentação encontrada.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </article>
+
+    <article class="dashboard-box">
+        <div class="box-header">
+            <h3>Chaves há mais tempo em aberto</h3>
+        </div>
+
+        <div class="tabela-responsiva">
+            <table class="tabela-dashboard">
+                <thead>
+                    <tr>
+                        <th>Chave</th>
+                        <th>Local</th>
+                        <th>Responsável</th>
+                        <th>Retirada</th>
+                        <th>Tempo em aberto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in retiradas_abertas %}
+                        <tr>
+                            <td>{{ item.codigo }}</td>
+                            <td>{{ item.local }}</td>
+                            <td>{{ item.responsavel }}</td>
+                            <td>{{ item.data_retirada }}</td>
+                            <td>{{ item.tempo_aberto_formatado }}</td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="5">Nenhuma chave em aberto no momento.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </article>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const statusChavesLabels = JSON.parse('{{ status_chaves_labels | tojson | safe }}');
+    const statusChavesValores = JSON.parse('{{ status_chaves_valores | tojson | safe }}');
+
+    const topChavesLabels = JSON.parse('{{ top_chaves_labels | tojson | safe }}');
+    const topChavesValores = JSON.parse('{{ top_chaves_valores | tojson | safe }}');
+
+    const topUsuariosLabels = JSON.parse('{{ top_usuarios_labels | tojson | safe }}');
+    const topUsuariosValores = JSON.parse('{{ top_usuarios_valores | tojson | safe }}');
+
+    const retiradasDiaLabels = JSON.parse('{{ retiradas_por_dia_labels | tojson | safe }}');
+    const retiradasDiaValores = JSON.parse('{{ retiradas_por_dia_valores | tojson | safe }}');
+
+    new Chart(document.getElementById("graficoStatusChaves"), {
+        type: "doughnut",
+        data: {
+            labels: statusChavesLabels,
+            datasets: [{
+                data: statusChavesValores,
+                backgroundColor: ["#1f9d55", "#dc2626"],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    position: "bottom"
+                }
+            }
+        }
+    });
+
+    new Chart(document.getElementById("graficoTopChaves"), {
+        type: "bar",
+        data: {
+            labels: topChavesLabels,
+            datasets: [{
+                label: "Usos",
+                data: topChavesValores,
+                backgroundColor: "#0b5fc0",
+                borderRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
+                    }
+                }
+            }
+        }
+    });
+
+    new Chart(document.getElementById("graficoTopUsuarios"), {
+        type: "bar",
+        data: {
+            labels: topUsuariosLabels,
+            datasets: [{
+                label: "Retiradas",
+                data: topUsuariosValores,
+                backgroundColor: "#003f91",
+                borderRadius: 8
+            }]
+        },
+        options: {
+            indexAxis: "y",
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
+                    }
+                }
+            }
+        }
+    });
+
+    new Chart(document.getElementById("graficoRetiradasDia"), {
+        type: "line",
+        data: {
+            labels: retiradasDiaLabels,
+            datasets: [{
+                label: "Retiradas",
+                data: retiradasDiaValores,
+                borderColor: "#003f91",
+                backgroundColor: "rgba(0, 63, 145, 0.12)",
+                fill: true,
+                tension: 0.25,
+                pointRadius: 4,
+                pointBackgroundColor: "#003f91"
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: true
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0
+                    }
+                }
+            }
+        }
+    });
+</script>
 
 {% endblock %}

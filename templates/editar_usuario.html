@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}Editar usuário | Guardião de Chaves{% endblock %}
+
+{% block content %}
+
+<section class="titulo-pagina">
+    <h2>Editar usuário</h2>
+    <p>Atualize os dados do usuário ou redefina o PIN de acesso.</p>
+</section>
+
+<section class="form-box form-usuario-box">
+    <form method="POST">
+
+        <div class="form-grid form-grid-usuario">
+
+            <div class="campo-form">
+                <label for="matricula">Matrícula</label>
+                <input 
+                    type="text" 
+                    id="matricula" 
+                    name="matricula" 
+                    value="{{ usuario.matricula }}"
+                    required
+                >
+            </div>
+
+            <div class="campo-form">
+                <label for="nome">Nome completo</label>
+                <input 
+                    type="text" 
+                    id="nome" 
+                    name="nome" 
+                    value="{{ usuario.nome }}"
+                    required
+                >
+            </div>
+
+            <div class="campo-form">
+                <label for="tipo_usuario">Tipo de usuário</label>
+                <select id="tipo_usuario" name="tipo_usuario" required>
+                    <option value="">Selecione</option>
+                    <option value="Aluno" {% if usuario.tipo_usuario == "Aluno" %}selected{% endif %}>Aluno</option>
+                    <option value="Professor" {% if usuario.tipo_usuario == "Professor" %}selected{% endif %}>Professor</option>
+                    <option value="Técnico" {% if usuario.tipo_usuario == "Técnico" %}selected{% endif %}>Técnico</option>
+                    <option value="Funcionário" {% if usuario.tipo_usuario == "Funcionário" %}selected{% endif %}>Funcionário</option>
+                </select>
+            </div>
+
+            <div class="campo-form">
+                <label for="telefone">Telefone</label>
+                <input 
+                    type="text" 
+                    id="telefone" 
+                    name="telefone" 
+                    value="{{ usuario.telefone or '' }}"
+                    placeholder="Ex: (21) 99999-9999"
+                    maxlength="15"
+                >
+            </div>
+
+            <div class="campo-form">
+                <label for="curso_setor">Curso/Área</label>
+                <input 
+                    type="text" 
+                    id="curso_setor" 
+                    name="curso_setor" 
+                    value="{{ usuario.curso_setor or '' }}"
+                >
+            </div>
+
+            <div class="campo-form">
+                <label for="novo_pin">Novo PIN de 4 dígitos</label>
+                <input 
+                    type="password" 
+                    id="novo_pin" 
+                    name="novo_pin" 
+                    placeholder="Deixe vazio para manter o PIN atual"
+                    maxlength="4"
+                    pattern="[0-9]{4}"
+                >
+            </div>
+
+            <div class="campo-form">
+                <label for="confirmar_novo_pin">Confirmar novo PIN</label>
+                <input 
+                    type="password" 
+                    id="confirmar_novo_pin" 
+                    name="confirmar_novo_pin" 
+                    placeholder="Repita o novo PIN"
+                    maxlength="4"
+                    pattern="[0-9]{4}"
+                >
+            </div>
+
+        </div>
+
+        <div class="acoes-form">
+            <button type="submit" class="btn btn-principal">Salvar alterações</button>
+            <a href="{{ url_for('usuarios') }}" class="btn btn-secundario">Voltar</a>
+        </div>
+
+    </form>
+</section>
+
+{% endblock %}

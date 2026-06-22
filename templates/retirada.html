@@ -9,101 +9,109 @@
     <p>Selecione uma chave disponível e registre a retirada por um usuário cadastrado.</p>
 </section>
 
-<section class="form-box">
-    <form method="POST" id="form-retirada">
+<div class="retirada-layout">
 
-        <div class="campo">
-            <label for="matricula">Matrícula do usuário</label>
-            <input 
-                type="text" 
-                id="matricula" 
-                name="matricula" 
-                placeholder="Digite a matrícula do responsável"
-                required
-            >
-        </div>
+    <section class="form-box retirada-conteudo">
+        <form method="POST">
 
-        <div class="campo">
-            <label>Selecione a chave</label>
-
-            <div class="legenda-chaves">
-                <span><span class="bolinha disponivel"></span> Disponível</span>
-                <span><span class="bolinha retirada"></span> Retirada</span>
-                <span><span class="bolinha selecionada"></span> Selecionada</span>
+            <div class="campo-retirada">
+                <label for="matricula">Matrícula do usuário</label>
+                <input 
+                    type="text" 
+                    id="matricula" 
+                    name="matricula" 
+                    placeholder="Digite a matrícula do responsável"
+                    required
+                >
             </div>
 
-            <div class="mapa-chaves">
+            <input type="hidden" name="chave_id" id="chave_id" required>
+
+            <div class="chaves-header">
+                <h3>Selecione a chave</h3>
+
+                <div class="legenda-chaves">
+                    <span><i class="bolinha verde"></i> Disponível</span>
+                    <span><i class="bolinha vermelha"></i> Retirada</span>
+                    <span><i class="bolinha azul"></i> Selecionada</span>
+                </div>
+            </div>
+
+            <div class="grade-chaves">
                 {% for chave in chaves %}
-                    {% if chave.status == "Disponível" %}
-                        <button 
-                            type="button"
-                            class="chave-card chave-disponivel"
-                            data-id="{{ chave.id }}"
-                            onclick="selecionarChave(this)"
-                        >
-                            <div class="chave-local">{{ chave.local }}</div>
-                            <div class="chave-codigo">{{ chave.codigo }}</div>
-                        </button>
-                    {% else %}
-                        <button 
-                            type="button"
-                            class="chave-card chave-retirada"
-                            disabled
-                        >
-                            <div class="chave-local">{{ chave.local }}</div>
-                            <div class="chave-codigo">{{ chave.codigo }}</div>
-                        </button>
-                    {% endif %}
+                    <button 
+                        type="button"
+                        class="chave-card {% if chave.status == 'Disponível' %}disponivel{% else %}retirada{% endif %}"
+                        data-chave-id="{{ chave.id }}"
+                        {% if chave.status != 'Disponível' %}disabled{% endif %}
+                    >
+                        <strong>{{ chave.local }}</strong>
+                        <span>{{ chave.codigo }}</span>
+                    </button>
+                {% else %}
+                    <p>Nenhuma chave encontrada para este filtro.</p>
                 {% endfor %}
             </div>
 
-            <input type="hidden" id="chave_id" name="chave_id" required>
-        </div>
+            <div class="campo-retirada campo-observacao">
+                <label for="observacao">Observação</label>
+                <textarea 
+                    id="observacao" 
+                    name="observacao"
+                    placeholder="Ex: retirada para aula prática, laboratório, manutenção, atividade acadêmica..."
+                ></textarea>
+            </div>
 
-        <div class="campo">
-            <label for="observacao">Observação</label>
-            <textarea 
-                id="observacao" 
-                name="observacao" 
-                placeholder="Ex: retirada para aula prática, laboratório, manutenção, atividade acadêmica..."
-            ></textarea>
-        </div>
+            <div class="acoes-form">
+                <button type="submit" class="btn btn-principal">Registrar retirada</button>
+                <a href="{{ url_for('index') }}" class="btn btn-secundario">Voltar</a>
+            </div>
 
-        <div class="botoes">
-            <button type="submit" class="btn btn-principal">Registrar retirada</button>
-            <a href="{{ url_for('index') }}" class="btn btn-secundario">Voltar</a>
-        </div>
-
-    </form>
-</section>
-
-{% if not chaves %}
-    <section class="form-box" style="margin-top: 18px;">
-        <p>Nenhuma chave cadastrada no sistema.</p>
+        </form>
     </section>
-{% endif %}
+
+    <aside class="filtro-lateral">
+        <h3>Filtrar salas</h3>
+
+        <a href="{{ url_for('retirada') }}"
+           class="filtro-btn {% if tipo_filtro == 'todos' %}ativo{% endif %}">
+            Todas
+        </a>
+
+        <a href="{{ url_for('retirada', tipo='laboratorio') }}"
+           class="filtro-btn {% if tipo_filtro == 'laboratorio' %}ativo{% endif %}">
+            Laboratórios
+        </a>
+
+        <a href="{{ url_for('retirada', tipo='administrativo') }}"
+           class="filtro-btn {% if tipo_filtro == 'administrativo' %}ativo{% endif %}">
+            Administrativo
+        </a>
+
+        <a href="{{ url_for('retirada', tipo='sala_aula', andar=1) }}"
+           class="filtro-btn {% if tipo_filtro == 'sala_aula' and andar_filtro == '1' %}ativo{% endif %}">
+            Salas 1º andar
+        </a>
+
+        <a href="{{ url_for('retirada', tipo='sala_aula', andar=2) }}"
+           class="filtro-btn {% if tipo_filtro == 'sala_aula' and andar_filtro == '2' %}ativo{% endif %}">
+            Salas 2º andar
+        </a>
+    </aside>
+
+</div>
 
 <script>
-    function selecionarChave(botao) {
-        const chaveId = botao.getAttribute("data-id");
-        const inputChave = document.getElementById("chave_id");
+    const botoesChave = document.querySelectorAll(".chave-card.disponivel");
+    const inputChaveId = document.getElementById("chave_id");
 
-        const todasChaves = document.querySelectorAll(".chave-card");
-        todasChaves.forEach(chave => {
-            chave.classList.remove("chave-selecionada");
+    botoesChave.forEach(botao => {
+        botao.addEventListener("click", () => {
+            botoesChave.forEach(b => b.classList.remove("selecionada"));
+
+            botao.classList.add("selecionada");
+            inputChaveId.value = botao.dataset.chaveId;
         });
-
-        botao.classList.add("chave-selecionada");
-        inputChave.value = chaveId;
-    }
-
-    document.getElementById("form-retirada").addEventListener("submit", function(event) {
-        const chaveSelecionada = document.getElementById("chave_id").value;
-
-        if (!chaveSelecionada) {
-            event.preventDefault();
-            alert("Selecione uma chave disponível antes de registrar a retirada.");
-        }
     });
 </script>
 

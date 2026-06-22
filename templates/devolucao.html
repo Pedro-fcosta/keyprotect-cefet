@@ -6,13 +6,11 @@
 
 <section class="titulo-pagina">
     <h2>Devolução de chave</h2>
-    <p>Informe a matrícula de quem está devolvendo e finalize uma retirada em aberto.</p>
+    <p>Informe a matrícula e o PIN da pessoa que está devolvendo a chave.</p>
 </section>
 
-{% if movimentacoes %}
-
-<section class="tabela-box">
-    <table>
+<section class="form-box">
+    <table class="tabela">
         <thead>
             <tr>
                 <th>Chave</th>
@@ -21,53 +19,63 @@
                 <th>Matrícula retirada</th>
                 <th>Data da retirada</th>
                 <th>Matrícula de quem devolve</th>
+                <th>PIN</th>
                 <th>Ação</th>
             </tr>
         </thead>
 
         <tbody>
             {% for mov in movimentacoes %}
-            <tr>
-                <td><strong>{{ mov.codigo }}</strong></td>
-                <td>{{ mov.local }}</td>
-                <td>{{ mov.nome }}</td>
-                <td>{{ mov.matricula }}</td>
-                <td>{{ mov.data_retirada }}</td>
-                <td>
-                    <form method="POST" class="form-devolucao-linha">
-                        <input type="hidden" name="movimentacao_id" value="{{ mov.id }}">
+                <tr>
+                    <td>{{ mov.codigo }}</td>
+                    <td>{{ mov.local }}</td>
+                    <td>{{ mov.nome_retirada }}</td>
+                    <td>{{ mov.matricula_retirada }}</td>
+                    <td>{{ mov.data_retirada }}</td>
 
+                    <form method="POST">
                         <input 
-                            type="text" 
-                            name="matricula_devolucao" 
-                            placeholder="Matrícula"
-                            required
-                            class="input-tabela"
+                            type="hidden" 
+                            name="movimentacao_id" 
+                            value="{{ mov.id }}"
                         >
-                </td>
-                <td>
-                        <button type="submit" class="btn btn-principal">
-                            Devolver
-                        </button>
+
+                        <td>
+                            <input 
+                                type="text" 
+                                name="matricula_devolucao" 
+                                placeholder="Matrícula"
+                                class="input-tabela"
+                                required
+                            >
+                        </td>
+
+                        <td>
+                            <input 
+                                type="password" 
+                                name="pin" 
+                                placeholder="PIN"
+                                maxlength="4"
+                                pattern="[0-9]{4}"
+                                class="input-tabela input-pin"
+                                required
+                            >
+                        </td>
+
+                        <td>
+                            <button type="submit" class="btn btn-principal">
+                                Devolver
+                            </button>
+                        </td>
                     </form>
-                </td>
-            </tr>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="8">Nenhuma chave está em aberto para devolução.</td>
+                </tr>
             {% endfor %}
         </tbody>
     </table>
 </section>
-
-{% else %}
-
-<section class="form-box">
-    <p>Não existem chaves pendentes de devolução no momento.</p>
-
-    <div class="botoes">
-        <a href="{{ url_for('index') }}" class="btn btn-secundario">Voltar ao início</a>
-        <a href="{{ url_for('retirada') }}" class="btn btn-principal">Registrar retirada</a>
-    </div>
-</section>
-
-{% endif %}
 
 {% endblock %}

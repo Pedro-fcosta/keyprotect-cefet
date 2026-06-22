@@ -9,23 +9,36 @@
     <p>Inclua um aluno, professor, técnico ou funcionário autorizado a retirar chaves.</p>
 </section>
 
-<section class="form-box">
+<section class="form-box form-usuario-box">
     <form method="POST">
 
-        <div class="form-grid">
-            <div class="campo">
+        <div class="form-grid form-grid-usuario">
+
+            <div class="campo-form">
                 <label for="matricula">Matrícula</label>
-                <input type="text" id="matricula" name="matricula" placeholder="Ex: 2023123456" required>
+                <input 
+                    type="text" 
+                    id="matricula" 
+                    name="matricula" 
+                    placeholder="Ex: 2023123456"
+                    required
+                >
             </div>
 
-            <div class="campo">
+            <div class="campo-form">
                 <label for="nome">Nome completo</label>
-                <input type="text" id="nome" name="nome" placeholder="Ex: Pedro Fernandes" required>
+                <input 
+                    type="text" 
+                    id="nome" 
+                    name="nome" 
+                    placeholder="Ex: Pedro Fernandes"
+                    required
+                >
             </div>
 
-            <div class="campo">
+            <div class="campo-form">
                 <label for="tipo_usuario">Tipo de usuário</label>
-                <select id="tipo_usuario" name="tipo_usuario" required onchange="atualizarCampos()">
+                <select id="tipo_usuario" name="tipo_usuario" required>
                     <option value="">Selecione</option>
                     <option value="Aluno">Aluno</option>
                     <option value="Professor">Professor</option>
@@ -34,35 +47,56 @@
                 </select>
             </div>
 
-            <div class="campo">
+            <div class="campo-form">
                 <label for="telefone">Telefone</label>
-                <input type="text" id="telefone" name="telefone" placeholder="Ex: (21) 99999-9999">
+                <input 
+                    type="text" 
+                    id="telefone" 
+                    name="telefone" 
+                    placeholder="Ex: (21) 99999-9999"
+                    maxlength="15"
+                >
             </div>
+
+            <div class="campo-form">
+                <label for="curso_setor">Curso/Área</label>
+                <input 
+                    type="text" 
+                    id="curso_setor" 
+                    name="curso_setor" 
+                    placeholder="Ex: Engenharia Mecânica"
+                >
+            </div>
+
+            <div class="campo-form">
+                <label for="pin">PIN de 4 dígitos</label>
+                <input 
+                    type="password" 
+                    id="pin" 
+                    name="pin" 
+                    placeholder="Ex: 1234"
+                    maxlength="4"
+                    pattern="[0-9]{4}"
+                    required
+                >
+            </div>
+
+            <div class="campo-form">
+                <label for="confirmar_pin">Confirmar PIN</label>
+                <input 
+                    type="password" 
+                    id="confirmar_pin" 
+                    name="confirmar_pin" 
+                    placeholder="Digite novamente o PIN"
+                    maxlength="4"
+                    pattern="[0-9]{4}"
+                    required
+                >
+            </div>
+
         </div>
 
-        <div class="campo" id="campo_aluno" style="display: none;">
-            <label for="curso_aluno">Curso</label>
-            <select id="curso_aluno">
-                <option value="">Selecione o curso</option>
-                <option value="Engenharia Mecânica">Engenharia Mecânica</option>
-                <option value="Engenharia de Produção">Engenharia de Produção</option>
-                <option value="Técnico em Mecânica">Técnico em Mecânica</option>
-                <option value="Técnico em Automação">Técnico em Automação</option>
-            </select>
-        </div>
-
-        <div class="campo" id="campo_professor" style="display: none;">
-            <label for="ensino_professor">Área de atuação</label>
-            <select id="ensino_professor">
-                <option value="">Selecione</option>
-                <option value="Ensino Superior">Ensino Superior</option>
-                <option value="Ensino Técnico">Ensino Técnico</option>
-            </select>
-        </div>
-
-        <input type="hidden" id="curso_setor" name="curso_setor">
-
-        <div class="botoes">
+        <div class="acoes-form">
             <button type="submit" class="btn btn-principal">Cadastrar usuário</button>
             <a href="{{ url_for('usuarios') }}" class="btn btn-secundario">Voltar</a>
         </div>
@@ -71,47 +105,23 @@
 </section>
 
 <script>
-    function atualizarCampos() {
-        const tipoUsuario = document.getElementById("tipo_usuario").value;
+    const tipoUsuario = document.getElementById("tipo_usuario");
+    const cursoSetor = document.getElementById("curso_setor");
 
-        const campoAluno = document.getElementById("campo_aluno");
-        const campoProfessor = document.getElementById("campo_professor");
-
-        const cursoAluno = document.getElementById("curso_aluno");
-        const ensinoProfessor = document.getElementById("ensino_professor");
-        const cursoSetor = document.getElementById("curso_setor");
-
-        campoAluno.style.display = "none";
-        campoProfessor.style.display = "none";
-
-        cursoAluno.required = false;
-        ensinoProfessor.required = false;
-
-        cursoAluno.value = "";
-        ensinoProfessor.value = "";
-        cursoSetor.value = "";
-
-        if (tipoUsuario === "Aluno") {
-            campoAluno.style.display = "flex";
-            cursoAluno.required = true;
-        }
-
-        if (tipoUsuario === "Professor") {
-            campoProfessor.style.display = "flex";
-            ensinoProfessor.required = true;
-        }
-    }
-
-    document.querySelector("form").addEventListener("submit", function() {
-        const tipoUsuario = document.getElementById("tipo_usuario").value;
-        const cursoSetor = document.getElementById("curso_setor");
-
-        if (tipoUsuario === "Aluno") {
-            cursoSetor.value = document.getElementById("curso_aluno").value;
-        } else if (tipoUsuario === "Professor") {
-            cursoSetor.value = document.getElementById("ensino_professor").value;
-        } else {
+    tipoUsuario.addEventListener("change", function () {
+        if (this.value === "Aluno") {
+            cursoSetor.placeholder = "Ex: Engenharia Mecânica";
+            cursoSetor.disabled = false;
+        } else if (this.value === "Professor") {
+            cursoSetor.placeholder = "Ex: Ensino Superior ou Ensino Técnico";
+            cursoSetor.disabled = false;
+        } else if (this.value === "Técnico" || this.value === "Funcionário") {
             cursoSetor.value = "";
+            cursoSetor.placeholder = "Não necessário";
+            cursoSetor.disabled = true;
+        } else {
+            cursoSetor.placeholder = "Ex: Engenharia Mecânica";
+            cursoSetor.disabled = false;
         }
     });
 </script>

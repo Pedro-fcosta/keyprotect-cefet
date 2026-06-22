@@ -1,77 +1,56 @@
 {% extends "base.html" %}
 
-{% block title %}Início | Guardião de Chaves{% endblock %}
+{% block title %}Início{% endblock %}
 
 {% block content %}
 
 <section class="titulo-pagina">
     <h2>Painel inicial</h2>
-    <p>Resumo geral do controle de chaves do CEFET/RJ.</p>
+    <p>Escolha uma operação para continuar.</p>
 </section>
 
-<section class="cards">
-    <div class="card">
-        <h3>Total de chaves</h3>
-        <div class="numero">{{ total_chaves }}</div>
-    </div>
+<section class="home-acoes">
 
-    <div class="card">
-        <h3>Chaves disponíveis</h3>
-        <div class="numero">{{ chaves_disponiveis }}</div>
-    </div>
-
-    <div class="card">
-        <h3>Chaves retiradas</h3>
-        <div class="numero">{{ chaves_retiradas }}</div>
-    </div>
-
-    <div class="card">
-        <h3>Movimentos em aberto</h3>
-        <div class="numero">{{ movimentos_abertos }}</div>
-    </div>
-</section>
-
-<section class="acoes">
-    <a class="acao" href="{{ url_for('retirada') }}">
-        <h3>Retirar chave</h3>
-        <p>Registre a retirada de uma chave disponível.</p>
+    <a href="{{ url_for('retirada') }}" class="home-card destaque">
+        <span class="home-card-titulo">Retirar chave</span>
+        <span class="home-card-texto">Registre a retirada de uma chave disponível.</span>
     </a>
 
-    <a class="acao" href="{{ url_for('devolucao') }}">
-        <h3>Devolver chave</h3>
-        <p>Finalize uma movimentação em aberto.</p>
+    <a href="{{ url_for('devolucao') }}" class="home-card destaque">
+        <span class="home-card-titulo">Devolver chave</span>
+        <span class="home-card-texto">Finalize uma movimentação em aberto.</span>
     </a>
 
-    <a class="acao" href="{{ url_for('chaves') }}">
-        <h3>Consultar chaves</h3>
-        <p>Veja a situação atual das chaves cadastradas.</p>
+    <a href="{{ url_for('chaves') }}" class="home-card">
+        <span class="home-card-titulo">Consultar chaves</span>
+        <span class="home-card-texto">Veja a situação atual das chaves cadastradas.</span>
     </a>
 
-    <a class="acao" href="{{ url_for('usuarios') }}">
-        <h3>Usuários</h3>
-        <p>Consulte e cadastre usuários autorizados.</p>
+    <a href="{{ url_for('historico') }}" class="home-card">
+        <span class="home-card-titulo">Histórico</span>
+        <span class="home-card-texto">Acompanhe retiradas, devoluções e pendências.</span>
     </a>
 
-    <a class="acao" href="{{ url_for('historico') }}">
-        <h3>Histórico</h3>
-        <p>Acompanhe retiradas, devoluções e pendências.</p>
+    <a href="{{ url_for('usuarios') }}" class="home-card">
+        <span class="home-card-titulo">Usuários</span>
+        <span class="home-card-texto">Consulte e cadastre usuários autorizados.</span>
     </a>
 
-    <a class="acao" href="{{ url_for('cadastrar_chave') }}">
-        <h3>Cadastrar chave</h3>
-        <p>Inclua uma nova chave no sistema.</p>
+    <a href="{{ url_for('cadastrar_chave') }}" class="home-card">
+        <span class="home-card-titulo">Cadastrar chave</span>
+        <span class="home-card-texto">Inclua uma nova chave no sistema.</span>
     </a>
 
-    <a class="acao" href="{{ url_for('cadastrar_usuario') }}">
-        <h3>Cadastrar usuário</h3>
-        <p>Inclua um novo usuário autorizado a retirar chaves.</p>
+    <a href="{{ url_for('cadastrar_usuario') }}" class="home-card">
+        <span class="home-card-titulo">Cadastrar usuário</span>
+        <span class="home-card-texto">Inclua um novo usuário autorizado.</span>
     </a>
 
-
-    <a class="acao" href="{{ url_for('dashboard') }}">
-        <h3>Dashboard</h3>
-        <p>Visualize os principais indicadores do controle de chaves.</p>
+    <a href="{{ url_for('dashboard') }}" class="home-card">
+        <span class="home-card-titulo">Dashboard</span>
+        <span class="home-card-texto">Visualize indicadores do controle de chaves.</span>
     </a>
+
 </section>
 
 {% endblock %}

@@ -6,30 +6,158 @@
 
 <section class="titulo-pagina">
     <h2>Histórico de movimentações</h2>
-    <p>Consulte retiradas, devoluções e movimentações em aberto.</p>
+    <p>Consulte retiradas, devoluções e movimentações em aberto usando filtros por pessoa, sala, chave, status, data e horário.</p>
 </section>
 
-<section class="filtro-box">
-    <form method="GET" class="filtro">
-        <input 
-            type="text" 
-            name="busca" 
-            placeholder="Buscar por nome, matrícula, chave, local ou status..." 
-            value="{{ busca }}"
-        >
+<section class="filtro-box historico-filtro-box">
+    <form method="GET" action="{{ url_for('historico') }}" class="historico-filtros">
 
-        <button type="submit" class="btn btn-principal">Buscar</button>
-        <a href="{{ url_for('historico') }}" class="btn btn-secundario">Limpar</a>
-        <a href="{{ url_for('exportar_historico') }}" class="btn btn-principal">Exportar CSV</a>
+        <div class="filtro-linha filtro-linha-principal">
+            <input 
+                type="text" 
+                name="busca" 
+                placeholder="Busca geral: nome, matrícula, chave, sala, status ou observação..." 
+                value="{{ busca or '' }}"
+                class="input-busca-geral"
+            >
+
+            <button type="submit" class="btn btn-principal">Buscar</button>
+            <a href="{{ url_for('historico') }}" class="btn btn-secundario">Limpar</a>
+        </div>
+
+        <div class="filtro-linha filtro-linha-avancada">
+            <div class="campo-filtro">
+                <label>Pessoa</label>
+                <input 
+                    type="text" 
+                    name="pessoa" 
+                    placeholder="Nome de quem retirou/devolveu"
+                    value="{{ pessoa or '' }}"
+                >
+            </div>
+
+            <div class="campo-filtro">
+                <label>Matrícula</label>
+                <input 
+                    type="text" 
+                    name="matricula" 
+                    placeholder="Matrícula"
+                    value="{{ matricula or '' }}"
+                >
+            </div>
+
+            <div class="campo-filtro">
+                <label>Sala / Local</label>
+                <input 
+                    type="text" 
+                    name="sala" 
+                    placeholder="Ex: C203"
+                    value="{{ sala or '' }}"
+                >
+            </div>
+
+            <div class="campo-filtro">
+                <label>Chave</label>
+                <input 
+                    type="text" 
+                    name="chave" 
+                    placeholder="Ex: CH-003"
+                    value="{{ chave or '' }}"
+                >
+            </div>
+
+            <div class="campo-filtro">
+                <label>Status</label>
+                <select name="status">
+                    <option value="">Todos</option>
+                    <option value="Em aberto" {% if status == "Em aberto" %}selected{% endif %}>Em aberto</option>
+                    <option value="Finalizada" {% if status == "Finalizada" %}selected{% endif %}>Finalizada</option>
+                </select>
+            </div>
+
+            <div class="campo-filtro">
+                <label>Tipo de data</label>
+                <select name="tipo_data">
+                    <option value="retirada" {% if tipo_data == "retirada" %}selected{% endif %}>Retirada</option>
+                    <option value="devolucao" {% if tipo_data == "devolucao" %}selected{% endif %}>Devolução</option>
+                </select>
+            </div>
+
+            <div class="campo-filtro">
+                <label>Período rápido</label>
+                <select name="periodo">
+                    <option value="">Todos</option>
+                    <option value="hoje" {% if periodo == "hoje" %}selected{% endif %}>Hoje</option>
+                    <option value="semana" {% if periodo == "semana" %}selected{% endif %}>Últimos 7 dias</option>
+                    <option value="mes" {% if periodo == "mes" %}selected{% endif %}>Últimos 30 dias</option>
+                    <option value="mes_atual" {% if periodo == "mes_atual" %}selected{% endif %}>Mês atual</option>
+                </select>
+            </div>
+
+            <div class="campo-filtro">
+                <label>Data inicial</label>
+                <input 
+                    type="date" 
+                    name="data_inicio"
+                    value="{{ data_inicio or '' }}"
+                >
+            </div>
+
+            <div class="campo-filtro">
+                <label>Data final</label>
+                <input 
+                    type="date" 
+                    name="data_fim"
+                    value="{{ data_fim or '' }}"
+                >
+            </div>
+
+            <div class="campo-filtro">
+                <label>Hora inicial</label>
+                <input 
+                    type="time" 
+                    name="hora_inicio"
+                    value="{{ hora_inicio or '' }}"
+                >
+            </div>
+
+            <div class="campo-filtro">
+                <label>Hora final</label>
+                <input 
+                    type="time" 
+                    name="hora_fim"
+                    value="{{ hora_fim or '' }}"
+                >
+            </div>
+        </div>
+
+        <div class="historico-exportacoes">
+            <a href="{{ url_for('exportar_historico') }}" class="btn btn-principal">
+                Exportar CSV
+            </a>
+
+            <a href="{{ url_for('exportar_historico_pdf') }}" class="btn btn-pdf">
+                Exportar PDF
+            </a>
+        </div>
+
     </form>
+</section>
+
+<section class="historico-resumo">
+    <p>
+        <strong>{{ movimentacoes|length }}</strong>
+        movimentação(ões) encontrada(s).
+    </p>
 </section>
 
 <section class="historico-lista">
     {% for mov in movimentacoes %}
         <article class="historico-card">
             <div class="historico-topo">
-                <div>
-                    <h3>{{ mov.codigo }} <span class="historico-local">| {{ mov.local }}</span></h3>
+                <div class="historico-identificacao">
+                    <h3 class="historico-local-destaque">{{ mov.local }}</h3>
+                    <span class="historico-codigo-secundario">{{ mov.codigo }}</span>
                 </div>
 
                 <div>
@@ -82,7 +210,7 @@
         </article>
     {% else %}
         <section class="form-box">
-            <p>Nenhuma movimentação encontrada.</p>
+            <p>Nenhuma movimentação encontrada para os filtros selecionados.</p>
         </section>
     {% endfor %}
 </section>

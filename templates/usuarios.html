@@ -24,6 +24,7 @@
                     <th>Curso/Área</th>
                     <th>Telefone</th>
                     <th>Cadastrado em</th>
+                    <th>Ações</th>
                 </tr>
             </thead>
         </thead>
@@ -37,6 +38,11 @@
                 <td>{{ usuario.curso_setor or "-" }}</td>
                 <td>{{ usuario.telefone or "-" }}</td>
                 <td>{{ usuario.criado_em }}</td>
+                <td>
+                    <a href="{{ url_for('editar_usuario', usuario_id=usuario.id) }}" class="btn btn-secundario btn-pequeno">
+                        Editar
+                    </a>
+                </td>
             </tr>
             {% else %}
             <tr>

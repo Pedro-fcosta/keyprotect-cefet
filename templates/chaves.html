@@ -29,6 +29,7 @@
                 <th>Descrição</th>
                 <th>Status</th>
                 <th>Cadastrada em</th>
+                <th>Ações</th>
             </tr>
         </thead>
 
@@ -48,10 +49,15 @@
                     {% endif %}
                 </td>
                 <td>{{ chave.criado_em }}</td>
+                <td>
+                    <a href="{{ url_for('editar_chave', chave_id=chave.id) }}" class="btn btn-secundario btn-pequeno">
+                        Editar
+                    </a>
+                </td>
             </tr>
             {% else %}
             <tr>
-                <td colspan="5">Nenhuma chave cadastrada.</td>
+                <td colspan="6">Nenhuma chave cadastrada.</td>
             </tr>
             {% endfor %}
         </tbody>
