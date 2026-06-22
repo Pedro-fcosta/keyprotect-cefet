@@ -568,4 +568,4 @@ A proposta é demonstrar como ferramentas simples e acessíveis podem ser usadas
 
 Desenvolvido por **Pedro Fernandes da Costa**,**Myllena Borré de Oliveira** e **Bruno Leonardo Malafaia Vidal** .
 
-Estudante de Engenharia Mecânica no CEFET/RJ, com interesse em desenvolvimento de soluções aplicadas à engenharia, automação de processos, análise de dados, sistemas industriais e melhoria contínua.
+Estudantes de Engenharia Mecânica no CEFET/RJ, com interesse em desenvolvimento de soluções aplicadas à engenharia, automação de processos, análise de dados, sistemas industriais e melhoria contínua.
