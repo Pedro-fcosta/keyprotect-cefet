@@ -428,33 +428,6 @@ O sistema recriará o banco automaticamente.
 
 > Atenção: isso apaga usuários, chaves, movimentações e histórico.
 
----
-
-## Como adicionar prints ao README
-
-Crie a pasta:
-
-```text
-docs/screenshots/
-```
-
-Coloque os prints com nomes simples, sem espaço e sem acento.
-
-Exemplo:
-
-```text
-dashboard.png
-retirada-chave.png
-historico.png
-```
-
-Depois chame a imagem no README assim:
-
-```markdown
-![Dashboard](docs/screenshots/dashboard.png)
-```
-
----
 
 ## Fluxo recomendado com Git
 
@@ -580,7 +553,7 @@ Projeto e Produto
 ## Instituição
 
 ```text
-CEFET/RJ
+CEFET/RJ - UneD Itaguaí
 ```
 
 ---
@@ -595,6 +568,6 @@ A proposta é demonstrar como ferramentas simples e acessíveis podem ser usadas
 
 ## Autor
 
-Desenvolvido por **Pedro Fernandes da Costa** e integrantes do grupo.
+Desenvolvido por **Pedro Fernandes da Costa**,**Myllena Borré de Oliveira** e **Bruno Leonardo Malafaia Vidal** .
 
 Estudante de Engenharia Mecânica no CEFET/RJ, com interesse em desenvolvimento de soluções aplicadas à engenharia, automação de processos, análise de dados, sistemas industriais e melhoria contínua.
