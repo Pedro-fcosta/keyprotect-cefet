@@ -12,7 +12,7 @@ O projeto foi desenvolvido para a disciplina **Projeto e Produto** do **CEFET/RJ
 
 ## Visão geral
 
-O **KeyProtect** permite controlar quais chaves estão disponíveis, quais estão retiradas, quem retirou, quem devolveu, quando a movimentação aconteceu e quais pendências ainda estão em aberto.
+O **KeyProtect** permite  o usuário controlar quais chaves estão disponíveis, quais estão retiradas, quem retirou, quem devolveu, quando a movimentação aconteceu e quais pendências ainda estão em aberto.
 
 Além do controle operacional, o sistema também possui **dashboard com indicadores**, **histórico filtrável**, **exportação em CSV/PDF**, **autenticação por PIN com hash** e telas de edição para usuários e chaves.
 
