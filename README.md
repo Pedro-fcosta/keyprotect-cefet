@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="static/logo-keyprotect.png" alt="Logo KeyProtect" width="700">
+  <img src="static/logo-keyprotect-branca.png" alt="Logo KeyProtect" width="700">
 </p>
 
 # KeyProtect — Sistema de Controle de Chaves CEFET/RJ
