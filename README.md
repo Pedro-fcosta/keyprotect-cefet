@@ -1,4 +1,4 @@
-# Guardião de Chaves — Sistema de Controle de Chaves CEFET/RJ
+# KeyProtect — Sistema de Controle de Chaves CEFET/RJ
 
 Sistema web desenvolvido em **Python + Flask** para controle de retirada, devolução, consulta e gestão de chaves em ambiente institucional.
 
@@ -8,7 +8,7 @@ O projeto foi desenvolvido para a disciplina **Projeto e Produto** do **CEFET/RJ
 
 ## Visão geral
 
-O **Guardião de Chaves** permite controlar quais chaves estão disponíveis, quais estão retiradas, quem retirou, quem devolveu, quando a movimentação aconteceu e quais pendências ainda estão em aberto.
+O **KeyProtect** permite controlar quais chaves estão disponíveis, quais estão retiradas, quem retirou, quem devolveu, quando a movimentação aconteceu e quais pendências ainda estão em aberto.
 
 Além do controle operacional, o sistema também possui **dashboard com indicadores**, **histórico filtrável**, **exportação em CSV/PDF**, **autenticação por PIN com hash** e telas de edição para usuários e chaves.
 
@@ -566,6 +566,6 @@ A proposta é demonstrar como ferramentas simples e acessíveis podem ser usadas
 
 ## Autor
 
-Desenvolvido por **Pedro Fernandes da Costa**,**Myllena Borré de Oliveira** e **Bruno Leonardo Malafaia Vidal** .
+Desenvolvido por **Pedro Fernandes da Costa**, **Myllena Borré de Oliveira** e **Bruno Leonardo Malafaia Vidal** .
 
 Estudantes de Engenharia Mecânica no CEFET/RJ, com interesse em desenvolvimento de soluções aplicadas à engenharia, automação de processos, análise de dados, sistemas industriais e melhoria contínua.
