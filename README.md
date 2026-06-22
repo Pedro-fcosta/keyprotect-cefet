@@ -524,12 +524,10 @@ Possíveis evoluções do sistema:
 
 ## Integrantes do grupo
 
-Preencher com os nomes dos integrantes:
-
 ```text
-Pedro Fernandes da Costa -
-Myllena Borré de Oliveira -
-Bruno Leonardo Malafaia Vidal -
+Pedro Fernandes da Costa
+Myllena Borré de Oliveira
+Bruno Leonardo Malafaia Vidal
 ```
 
 ---
