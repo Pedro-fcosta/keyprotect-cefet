@@ -16,7 +16,6 @@ Além do controle operacional, o sistema também possui **dashboard com indicado
 
 ## Demonstração visual
 
-> Coloque os prints dentro da pasta `docs/screenshots/` e mantenha os nomes abaixo para que as imagens apareçam corretamente no GitHub.
 
 ### Tela inicial
 
@@ -30,11 +29,6 @@ Além do controle operacional, o sistema também possui **dashboard com indicado
 
 ---
 
-### Filtros por tipo de sala
-
-![Filtros de sala](docs/screenshots/filtros-salas.png)
-
----
 
 ### Devolução com matrícula e PIN
 
@@ -54,27 +48,9 @@ Além do controle operacional, o sistema também possui **dashboard com indicado
 
 ---
 
-### Confirmação de exclusão segura
-
-![Modal de exclusão](docs/screenshots/modal-exclusao-chave.png)
-
----
-
 ### Usuários cadastrados
 
 ![Usuários cadastrados](docs/screenshots/usuarios-cadastrados.png)
-
----
-
-### Cadastro de usuário com PIN
-
-![Cadastro de usuário](docs/screenshots/cadastro-usuario.png)
-
----
-
-### Edição de usuário e redefinição de PIN
-
-![Editar usuário](docs/screenshots/editar-usuario.png)
 
 ---
 
@@ -84,33 +60,9 @@ Além do controle operacional, o sistema também possui **dashboard com indicado
 
 ---
 
-### Filtros avançados no histórico
-
-![Filtros do histórico](docs/screenshots/filtros-historico.png)
-
----
-
-### Exportação de histórico em PDF
-
-![Exportação PDF](docs/screenshots/exportar-historico-pdf.png)
-
----
-
 ### Dashboard de indicadores
 
 ![Dashboard](docs/screenshots/dashboard.png)
-
----
-
-### Dashboard com filtros de período
-
-![Dashboard filtros](docs/screenshots/dashboard-filtros.png)
-
----
-
-### Dashboard exportado em PDF
-
-![Dashboard PDF](docs/screenshots/dashboard-pdf.png)
 
 ---
 
@@ -603,10 +555,8 @@ Preencher com os nomes dos integrantes:
 
 ```text
 Pedro Fernandes da Costa -
-Nome 2 -
-Nome 3 -
-Nome 4 -
-Nome 5 -
+Myllena Borré de Oliveira -
+Bruno Leonardo Malafaia Vidal -
 ```
 
 ---
