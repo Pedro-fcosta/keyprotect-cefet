@@ -778,10 +778,10 @@ def editar_chave(chave_id):
         return redirect(url_for("chaves"))
 
     if request.method == "POST":
-        codigo = request.form["codigo"].strip().upper()
+        codigo = request.form.get("codigo", chave["codigo"]).strip().upper()
         local = request.form["local"].strip().upper()
         descricao = request.form.get("descricao", "").strip()
-        status = request.form["status"].strip()
+        status = request.form.get("status", chave["status"]).strip()
         tipo = request.form["tipo"].strip()
         andar = request.form.get("andar", "").strip()
 
@@ -898,6 +898,7 @@ def retirada():
 
     if request.method == "POST":
         matricula = request.form.get("matricula", "").strip()
+        pin = request.form.get("pin", "").strip()
         chave_id = request.form.get("chave_id", "").strip()
         observacao = request.form.get("observacao", "").strip()
         data_retirada = datetime.now().strftime("%d/%m/%Y %H:%M")
@@ -905,6 +906,16 @@ def retirada():
         if not matricula:
             conexao.close()
             flash("Digite a matrícula do usuário.", "erro")
+            return redirect(url_for("retirada", tipo=tipo_filtro, andar=andar_filtro))
+        
+        if not pin:
+            conexao.close()
+            flash("Digite o PIN do usuário.", "erro")
+            return redirect(url_for("retirada", tipo=tipo_filtro, andar=andar_filtro))
+
+        if not pin.isdigit() or len(pin) != 4:
+            conexao.close()
+            flash("O PIN deve conter exatamente 4 números.", "erro")
             return redirect(url_for("retirada", tipo=tipo_filtro, andar=andar_filtro))
 
         if not chave_id:
@@ -922,6 +933,18 @@ def retirada():
             conexao.close()
             flash("Usuário não encontrado. Cadastre o usuário antes da retirada.", "erro")
             return redirect(url_for("cadastrar_usuario"))
+
+
+        if not usuario["pin_hash"]:
+            conexao.close()
+            flash("Este usuário ainda não possui PIN cadastrado. Edite o usuário e cadastre um PIN.", "erro")
+            return redirect(url_for("retirada", tipo=tipo_filtro, andar=andar_filtro))
+
+        if not check_password_hash(usuario["pin_hash"], pin):
+            conexao.close()
+            flash("PIN incorreto para a matrícula informada.", "erro")
+            return redirect(url_for("retirada", tipo=tipo_filtro, andar=andar_filtro))
+
 
         chave = conexao.execute("""
             SELECT *

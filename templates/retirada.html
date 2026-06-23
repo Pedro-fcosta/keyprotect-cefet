@@ -14,15 +14,31 @@
     <section class="form-box retirada-conteudo">
         <form method="POST">
 
-            <div class="campo-retirada">
-                <label for="matricula">Matrícula do usuário</label>
-                <input 
-                    type="text" 
-                    id="matricula" 
-                    name="matricula" 
-                    placeholder="Digite a matrícula do responsável"
-                    required
-                >
+            <div class="campos-retirada-linha">
+                <div class="campo-retirada">
+                    <label for="matricula">Matrícula do usuário</label>
+                    <input 
+                        type="text" 
+                        id="matricula" 
+                        name="matricula" 
+                        placeholder="Digite a matrícula do responsável"
+                        required
+                    >
+                </div>
+
+                <div class="campo-retirada">
+                    <label for="pin">PIN</label>
+                    <input 
+                        type="password" 
+                        id="pin" 
+                        name="pin" 
+                        placeholder="Digite o PIN"
+                        maxlength="4"
+                        pattern="[0-9]{4}"
+                        inputmode="numeric"
+                        required
+                    >
+                </div>
             </div>
 
             <input type="hidden" name="chave_id" id="chave_id" required>
@@ -45,8 +61,15 @@
                         data-chave-id="{{ chave.id }}"
                         {% if chave.status != 'Disponível' %}disabled{% endif %}
                     >
-                        <strong>{{ chave.local }}</strong>
-                        <span>{{ chave.codigo }}</span>
+                        <strong 
+                            class="chave-local 
+                                {% if chave.local|length > 8 %}texto-longo{% endif %}
+                                {% if chave.local|length > 16 %}texto-muito-longo{% endif %}
+                            "
+                            title="{{ chave.codigo }} - {{ chave.local }}"
+                        >
+                            {{ chave.local }}
+                        </strong>
                     </button>
                 {% else %}
                     <p>Nenhuma chave encontrada para este filtro.</p>

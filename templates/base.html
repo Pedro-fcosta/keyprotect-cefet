@@ -2,6 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}KeyProtect{% endblock %}</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
@@ -12,27 +13,39 @@
     <header class="topbar">
         <div class="header-content">
 
-            <img src="{{ url_for('static', filename='logo-cefet.png') }}" alt="Logo CEFET/RJ" class="logo-img">
+            <div class="mobile-header-row">
+                <a href="{{ url_for('index') }}" class="logo-link">
+                    <img src="{{ url_for('static', filename='logo-cefet.png') }}" alt="Logo CEFET/RJ" class="logo-img">
+                </a>
+
+                <button type="button" class="menu-toggle" id="menuToggle" aria-label="Abrir menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
 
             <p class="subtitulo-sistema">
                 Sistema de controle de retirada e devolução de chaves
             </p>
 
-            <nav class="menu">
-                <a href="{{ url_for('index') }}">Início</a>
-                <a href="{{ url_for('retirada') }}">Retirada</a>
-                <a href="{{ url_for('devolucao') }}">Devolução</a>
-                <a href="{{ url_for('chaves') }}">Chaves</a>
-                <a href="{{ url_for('usuarios') }}">Usuários</a>
-                <a href="{{ url_for('historico') }}">Histórico</a>
-                <a href="{{ url_for('dashboard') }}">Dashboard</a>
-            </nav>
+            <div class="menu-area" id="menuArea">
+                <nav class="menu">
+                    <a href="{{ url_for('index') }}">Início</a>
+                    <a href="{{ url_for('retirada') }}">Retirada</a>
+                    <a href="{{ url_for('devolucao') }}">Devolução</a>
+                    <a href="{{ url_for('chaves') }}">Chaves</a>
+                    <a href="{{ url_for('usuarios') }}">Usuários</a>
+                    <a href="{{ url_for('historico') }}">Histórico</a>
+                    <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                </nav>
 
-            <div class="theme-switch-wrapper">
-                <button type="button" id="themeToggle" class="theme-toggle" aria-label="Alternar tema">
-                    <span class="theme-toggle-icon">🌙</span>
-                    <span class="theme-toggle-text">Tema escuro</span>
-                </button>
+                <div class="theme-switch-wrapper">
+                    <button type="button" id="themeToggle" class="theme-toggle" aria-label="Alternar tema">
+                        <span class="theme-toggle-icon">🌙</span>
+                        <span class="theme-toggle-text">Tema escuro</span>
+                    </button>
+                </div>
             </div>
 
         </div>
@@ -72,6 +85,7 @@
                 themeIcon.textContent = "🌙";
                 themeText.textContent = "Tema escuro";
             }
+
             document.dispatchEvent(new CustomEvent("temaAlterado", { detail: { tema: tema } }));
         }
 
@@ -82,6 +96,21 @@
             const temaAtual = document.documentElement.getAttribute("data-theme");
             const novoTema = temaAtual === "dark" ? "light" : "dark";
             aplicarTema(novoTema);
+        });
+
+        const menuToggle = document.getElementById("menuToggle");
+        const menuArea = document.getElementById("menuArea");
+
+        menuToggle.addEventListener("click", () => {
+            menuArea.classList.toggle("aberto");
+            menuToggle.classList.toggle("ativo");
+        });
+
+        document.querySelectorAll(".menu a").forEach((link) => {
+            link.addEventListener("click", () => {
+                menuArea.classList.remove("aberto");
+                menuToggle.classList.remove("ativo");
+            });
         });
     </script>
 

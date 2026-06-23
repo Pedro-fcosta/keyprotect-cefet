@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 {% extends "base.html" %}
 
 {% block title %}Editar chave | KeyProtect{% endblock %}
@@ -11,7 +10,11 @@
 </section>
 
 <section class="form-box form-chave-box">
+
     <form method="POST">
+        
+        <input type="hidden" name="status" value="{{ chave.status }}">
+        
         <div class="form-grid form-grid-chave">
 
             <div class="campo-form">
@@ -20,8 +23,8 @@
                     type="text" 
                     id="codigo" 
                     name="codigo" 
-                    value="{{ chave.codigo }}"
-                    required
+                    value="{{ chave.codigo }}" 
+                    readonly
                 >
             </div>
 
@@ -31,43 +34,54 @@
                     type="text" 
                     id="local" 
                     name="local" 
-                    value="{{ chave.local }}"
+                    value="{{ chave.local }}" 
+                    placeholder="Ex: Sala 201, Laboratório de Mecânica..."
                     required
                 >
             </div>
 
             <div class="campo-form">
-                <label for="status">Status</label>
-                <select id="status" name="status" required>
-                    <option value="Disponível" {% if chave.status == "Disponível" %}selected{% endif %}>Disponível</option>
-                    <option value="Retirada" {% if chave.status == "Retirada" %}selected{% endif %}>Retirada</option>
-                </select>
-            </div>
-
-            <div class="campo-form">
                 <label for="tipo">Tipo de ambiente</label>
                 <select id="tipo" name="tipo" required>
-                    <option value="sala_aula" {% if chave.tipo == "sala_aula" %}selected{% endif %}>Sala de aula</option>
-                    <option value="laboratorio" {% if chave.tipo == "laboratorio" %}selected{% endif %}>Laboratório</option>
-                    <option value="administrativo" {% if chave.tipo == "administrativo" %}selected{% endif %}>Administrativo</option>
+                    <option value="">Selecione o tipo</option>
+
+                    <option value="sala_aula" {% if chave.tipo == "sala_aula" %}selected{% endif %}>
+                        Sala de aula
+                    </option>
+
+                    <option value="laboratorio" {% if chave.tipo == "laboratorio" %}selected{% endif %}>
+                        Laboratório
+                    </option>
+
+                    <option value="administrativo" {% if chave.tipo == "administrativo" %}selected{% endif %}>
+                        Administrativo
+                    </option>
                 </select>
             </div>
 
             <div class="campo-form">
                 <label for="andar">Andar</label>
                 <select id="andar" name="andar">
-                    <option value="">Não se aplica</option>
-                    <option value="1" {% if chave.andar == 1 or chave.andar == "1" %}selected{% endif %}>1º andar</option>
-                    <option value="2" {% if chave.andar == 2 or chave.andar == "2" %}selected{% endif %}>2º andar</option>
+                    <option value="" {% if not chave.andar %}selected{% endif %}>
+                        Não se aplica
+                    </option>
+
+                    <option value="1" {% if chave.andar == 1 or chave.andar == "1" %}selected{% endif %}>
+                        1º andar
+                    </option>
+
+                    <option value="2" {% if chave.andar == 2 or chave.andar == "2" %}selected{% endif %}>
+                        2º andar
+                    </option>
                 </select>
             </div>
 
             <div class="campo-form campo-descricao">
-                <label for="descricao">Descrição</label>
+                <label for="descricao">Descrição / observação</label>
                 <textarea 
                     id="descricao" 
-                    name="descricao"
-                    placeholder="Ex: chave da sala C203, laboratório, coordenação..."
+                    name="descricao" 
+                    placeholder="Ex: Chave da sala principal, armário, laboratório, coordenação..."
                 >{{ chave.descricao or "" }}</textarea>
             </div>
 
@@ -75,208 +89,29 @@
 
         <div class="acoes-form acoes-chave">
             <div>
-                <button type="submit" class="btn btn-principal">Salvar alterações</button>
-                <a href="{{ url_for('chaves') }}" class="btn btn-secundario">Voltar</a>
-            </div>
-
-            <button type="button" class="btn-excluir" onclick="abrirModalExclusao()">
-                Excluir chave
-            </button>
-        </div>
-    </form>
-</section>
-
-<div id="modal-exclusao" class="modal-exclusao">
-    <div class="modal-conteudo">
-        <h3>Excluir chave?</h3>
-
-        <p>
-            Tem certeza que deseja excluir a chave 
-            <strong>{{ chave.codigo }} - {{ chave.local }}</strong>?
-        </p>
-
-        <p class="modal-alerta">
-            Essa ação não deve ser feita sem necessidade.
-        </p>
-
-        <div class="modal-acoes">
-            <button type="button" class="btn-modal-nao" onclick="fecharModalExclusao()">
-                Não, cancelar
-            </button>
-
-            <form method="POST" action="{{ url_for('excluir_chave', chave_id=chave.id) }}">
-                <button type="submit" class="btn-modal-sim">
-                    Sim, excluir
+                <button type="submit" class="btn btn-principal">
+                    Salvar alterações
                 </button>
-            </form>
-        </div>
-    </div>
-</div>
 
-<script>
-    const tipo = document.getElementById("tipo");
-    const andar = document.getElementById("andar");
-
-    function controlarAndar() {
-        if (tipo.value === "sala_aula") {
-            andar.disabled = false;
-        } else {
-            andar.value = "";
-            andar.disabled = true;
-        }
-    }
-
-    tipo.addEventListener("change", controlarAndar);
-    controlarAndar();
-
-    function abrirModalExclusao() {
-        document.getElementById("modal-exclusao").classList.add("ativo");
-    }
-
-    function fecharModalExclusao() {
-        document.getElementById("modal-exclusao").classList.remove("ativo");
-    }
-</script>
-
-=======
-{% extends "base.html" %}
-
-{% block title %}Editar chave | KeyProtect{% endblock %}
-
-{% block content %}
-
-<section class="titulo-pagina">
-    <h2>Editar chave</h2>
-    <p>Atualize as informações da chave cadastrada.</p>
-</section>
-
-<section class="form-box form-chave-box">
-    <form method="POST">
-        <div class="form-grid form-grid-chave">
-
-            <div class="campo-form">
-                <label for="codigo">Código da chave</label>
-                <input 
-                    type="text" 
-                    id="codigo" 
-                    name="codigo" 
-                    value="{{ chave.codigo }}"
-                    required
-                >
+                <a href="{{ url_for('chaves') }}" class="btn btn-secundario">
+                    Voltar
+                </a>
             </div>
-
-            <div class="campo-form">
-                <label for="local">Local / Sala</label>
-                <input 
-                    type="text" 
-                    id="local" 
-                    name="local" 
-                    value="{{ chave.local }}"
-                    required
-                >
-            </div>
-
-            <div class="campo-form">
-                <label for="status">Status</label>
-                <select id="status" name="status" required>
-                    <option value="Disponível" {% if chave.status == "Disponível" %}selected{% endif %}>Disponível</option>
-                    <option value="Retirada" {% if chave.status == "Retirada" %}selected{% endif %}>Retirada</option>
-                </select>
-            </div>
-
-            <div class="campo-form">
-                <label for="tipo">Tipo de ambiente</label>
-                <select id="tipo" name="tipo" required>
-                    <option value="sala_aula" {% if chave.tipo == "sala_aula" %}selected{% endif %}>Sala de aula</option>
-                    <option value="laboratorio" {% if chave.tipo == "laboratorio" %}selected{% endif %}>Laboratório</option>
-                    <option value="administrativo" {% if chave.tipo == "administrativo" %}selected{% endif %}>Administrativo</option>
-                </select>
-            </div>
-
-            <div class="campo-form">
-                <label for="andar">Andar</label>
-                <select id="andar" name="andar">
-                    <option value="">Não se aplica</option>
-                    <option value="1" {% if chave.andar == 1 or chave.andar == "1" %}selected{% endif %}>1º andar</option>
-                    <option value="2" {% if chave.andar == 2 or chave.andar == "2" %}selected{% endif %}>2º andar</option>
-                </select>
-            </div>
-
-            <div class="campo-form campo-descricao">
-                <label for="descricao">Descrição</label>
-                <textarea 
-                    id="descricao" 
-                    name="descricao"
-                    placeholder="Ex: chave da sala C203, laboratório, coordenação..."
-                >{{ chave.descricao or "" }}</textarea>
-            </div>
-
         </div>
 
-        <div class="acoes-form acoes-chave">
-            <div>
-                <button type="submit" class="btn btn-principal">Salvar alterações</button>
-                <a href="{{ url_for('chaves') }}" class="btn btn-secundario">Voltar</a>
-            </div>
-
-            <button type="button" class="btn-excluir" onclick="abrirModalExclusao()">
-                Excluir chave
-            </button>
-        </div>
     </form>
+
+    <form 
+        method="POST"
+        action="{{ url_for('excluir_chave', chave_id=chave.id) }}"
+        class="form-excluir-discreto"
+        onsubmit="return confirm('Tem certeza que deseja excluir esta chave?');"
+    >
+        <button type="submit" class="btn btn-excluir-discreto">
+            Excluir chave
+        </button>
+    </form>
+
 </section>
 
-<div id="modal-exclusao" class="modal-exclusao">
-    <div class="modal-conteudo">
-        <h3>Excluir chave?</h3>
-
-        <p>
-            Tem certeza que deseja excluir a chave 
-            <strong>{{ chave.codigo }} - {{ chave.local }}</strong>?
-        </p>
-
-        <p class="modal-alerta">
-            Essa ação não deve ser feita sem necessidade.
-        </p>
-
-        <div class="modal-acoes">
-            <button type="button" class="btn-modal-nao" onclick="fecharModalExclusao()">
-                Não, cancelar
-            </button>
-
-            <form method="POST" action="{{ url_for('excluir_chave', chave_id=chave.id) }}">
-                <button type="submit" class="btn-modal-sim">
-                    Sim, excluir
-                </button>
-            </form>
-        </div>
-    </div>
-</div>
-
-<script>
-    const tipo = document.getElementById("tipo");
-    const andar = document.getElementById("andar");
-
-    function controlarAndar() {
-        if (tipo.value === "sala_aula") {
-            andar.disabled = false;
-        } else {
-            andar.value = "";
-            andar.disabled = true;
-        }
-    }
-
-    tipo.addEventListener("change", controlarAndar);
-    controlarAndar();
-
-    function abrirModalExclusao() {
-        document.getElementById("modal-exclusao").classList.add("ativo");
-    }
-
-    function fecharModalExclusao() {
-        document.getElementById("modal-exclusao").classList.remove("ativo");
-    }
-</script>
-
->>>>>>> 857ba1d (Atualização do Projeto Completo)
 {% endblock %}

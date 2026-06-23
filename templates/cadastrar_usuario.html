@@ -58,14 +58,36 @@
                 >
             </div>
 
-            <div class="campo-form">
-                <label for="curso_setor">Curso/Área</label>
-                <input 
-                    type="text" 
-                    id="curso_setor" 
-                    name="curso_setor" 
-                    placeholder="Ex: Engenharia Mecânica"
-                >
+            <div class="campo-form" id="campoCursoSetor">
+                <label for="curso_setor">Curso / Área</label>
+
+                <select id="curso_setor" name="curso_setor">
+                    <option value="">Selecione</option>
+
+                    <option value="Engenharia Mecânica" data-tipo="Aluno">
+                        Engenharia Mecânica
+                    </option>
+
+                    <option value="Engenharia de Produção" data-tipo="Aluno">
+                        Engenharia de Produção
+                    </option>
+
+                    <option value="Técnico em Mecânica" data-tipo="Aluno">
+                        Técnico em Mecânica
+                    </option>
+
+                    <option value="Técnico em Automação" data-tipo="Aluno">
+                        Técnico em Automação
+                    </option>
+
+                    <option value="Ensino Superior" data-tipo="Professor">
+                        Ensino Superior
+                    </option>
+
+                    <option value="Ensino Técnico" data-tipo="Professor">
+                        Ensino Técnico
+                    </option>
+                </select>
             </div>
 
             <div class="campo-form">
@@ -77,6 +99,7 @@
                     placeholder="Ex: 1234"
                     maxlength="4"
                     pattern="[0-9]{4}"
+                    inputmode="numeric"
                     required
                 >
             </div>
@@ -90,6 +113,7 @@
                     placeholder="Digite novamente o PIN"
                     maxlength="4"
                     pattern="[0-9]{4}"
+                    inputmode="numeric"
                     required
                 >
             </div>
@@ -106,24 +130,47 @@
 
 <script>
     const tipoUsuario = document.getElementById("tipo_usuario");
+    const campoCursoSetor = document.getElementById("campoCursoSetor");
     const cursoSetor = document.getElementById("curso_setor");
+    const opcoesCursoSetor = Array.from(cursoSetor.options);
 
-    tipoUsuario.addEventListener("change", function () {
-        if (this.value === "Aluno") {
-            cursoSetor.placeholder = "Ex: Engenharia Mecânica";
+    function atualizarCampoCursoSetor() {
+        const tipo = tipoUsuario.value;
+
+        cursoSetor.value = "";
+
+        opcoesCursoSetor.forEach((opcao) => {
+            if (opcao.value === "") {
+                opcao.hidden = false;
+                return;
+            }
+
+            const tipoDaOpcao = opcao.dataset.tipo;
+            opcao.hidden = tipoDaOpcao !== tipo;
+        });
+
+        if (tipo === "Aluno") {
+            campoCursoSetor.style.display = "flex";
             cursoSetor.disabled = false;
-        } else if (this.value === "Professor") {
-            cursoSetor.placeholder = "Ex: Ensino Superior ou Ensino Técnico";
+            cursoSetor.required = true;
+        } else if (tipo === "Professor") {
+            campoCursoSetor.style.display = "flex";
             cursoSetor.disabled = false;
-        } else if (this.value === "Técnico" || this.value === "Funcionário") {
-            cursoSetor.value = "";
-            cursoSetor.placeholder = "Não necessário";
+            cursoSetor.required = true;
+        } else if (tipo === "Técnico" || tipo === "Funcionário") {
+            campoCursoSetor.style.display = "none";
             cursoSetor.disabled = true;
+            cursoSetor.required = false;
+            cursoSetor.value = "";
         } else {
-            cursoSetor.placeholder = "Ex: Engenharia Mecânica";
+            campoCursoSetor.style.display = "flex";
             cursoSetor.disabled = false;
+            cursoSetor.required = false;
         }
-    });
+    }
+
+    tipoUsuario.addEventListener("change", atualizarCampoCursoSetor);
+    atualizarCampoCursoSetor();
 </script>
 
 {% endblock %}

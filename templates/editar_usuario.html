@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 {% extends "base.html" %}
 
 {% block title %}Editar usuário | KeyProtect{% endblock %}
@@ -7,32 +6,35 @@
 
 <section class="titulo-pagina">
     <h2>Editar usuário</h2>
-    <p>Atualize os dados do usuário ou redefina o PIN de acesso.</p>
+    <p>Atualize os dados do usuário cadastrado.</p>
 </section>
 
 <section class="form-box form-usuario-box">
+
     <form method="POST">
 
         <div class="form-grid form-grid-usuario">
 
             <div class="campo-form">
                 <label for="matricula">Matrícula</label>
-                <input 
-                    type="text" 
-                    id="matricula" 
-                    name="matricula" 
+                <input
+                    type="text"
+                    id="matricula"
+                    name="matricula"
                     value="{{ usuario.matricula }}"
+                    readonly
                     required
                 >
             </div>
 
             <div class="campo-form">
                 <label for="nome">Nome completo</label>
-                <input 
-                    type="text" 
-                    id="nome" 
-                    name="nome" 
+                <input
+                    type="text"
+                    id="nome"
+                    name="nome"
                     value="{{ usuario.nome }}"
+                    placeholder="Ex: Pedro Fernandes da Costa"
                     required
                 >
             </div>
@@ -40,175 +42,130 @@
             <div class="campo-form">
                 <label for="tipo_usuario">Tipo de usuário</label>
                 <select id="tipo_usuario" name="tipo_usuario" required>
+                    <option value="">Selecione o tipo</option>
+
+                    <option value="Aluno" {% if usuario.tipo_usuario == "Aluno" %}selected{% endif %}>
+                        Aluno
+                    </option>
+
+                    <option value="Professor" {% if usuario.tipo_usuario == "Professor" %}selected{% endif %}>
+                        Professor
+                    </option>
+
+                    <option value="Técnico" {% if usuario.tipo_usuario == "Técnico" %}selected{% endif %}>
+                        Técnico
+                    </option>
+
+                    <option value="Funcionário" {% if usuario.tipo_usuario == "Funcionário" %}selected{% endif %}>
+                        Funcionário
+                    </option>
+                </select>
+            </div>
+
+            <div class="campo-form" id="campoCursoSetor">
+                <label for="curso_setor">Curso / Setor</label>
+                <select id="curso_setor" name="curso_setor">
                     <option value="">Selecione</option>
-                    <option value="Aluno" {% if usuario.tipo_usuario == "Aluno" %}selected{% endif %}>Aluno</option>
-                    <option value="Professor" {% if usuario.tipo_usuario == "Professor" %}selected{% endif %}>Professor</option>
-                    <option value="Técnico" {% if usuario.tipo_usuario == "Técnico" %}selected{% endif %}>Técnico</option>
-                    <option value="Funcionário" {% if usuario.tipo_usuario == "Funcionário" %}selected{% endif %}>Funcionário</option>
+
+                    <option value="Engenharia Mecânica" {% if usuario.curso_setor == "Engenharia Mecânica" %}selected{% endif %}>
+                        Engenharia Mecânica
+                    </option>
+
+                    <option value="Engenharia de Produção" {% if usuario.curso_setor == "Engenharia de Produção" %}selected{% endif %}>
+                        Engenharia de Produção
+                    </option>
+
+                    <option value="Técnico em Mecânica" {% if usuario.curso_setor == "Técnico em Mecânica" %}selected{% endif %}>
+                        Técnico em Mecânica
+                    </option>
+
+                    <option value="Técnico em Automação" {% if usuario.curso_setor == "Técnico em Automação" %}selected{% endif %}>
+                        Técnico em Automação
+                    </option>
+
+                    <option value="Ensino Superior" {% if usuario.curso_setor == "Ensino Superior" %}selected{% endif %}>
+                        Ensino Superior
+                    </option>
+
+                    <option value="Ensino Técnico" {% if usuario.curso_setor == "Ensino Técnico" %}selected{% endif %}>
+                        Ensino Técnico
+                    </option>
                 </select>
             </div>
 
             <div class="campo-form">
                 <label for="telefone">Telefone</label>
-                <input 
-                    type="text" 
-                    id="telefone" 
-                    name="telefone" 
+                <input
+                    type="text"
+                    id="telefone"
+                    name="telefone"
                     value="{{ usuario.telefone or '' }}"
                     placeholder="Ex: (21) 99999-9999"
-                    maxlength="15"
                 >
             </div>
 
             <div class="campo-form">
-                <label for="curso_setor">Curso/Área</label>
-                <input 
-                    type="text" 
-                    id="curso_setor" 
-                    name="curso_setor" 
-                    value="{{ usuario.curso_setor or '' }}"
-                >
-            </div>
-
-            <div class="campo-form">
-                <label for="novo_pin">Novo PIN de 4 dígitos</label>
-                <input 
-                    type="password" 
-                    id="novo_pin" 
-                    name="novo_pin" 
-                    placeholder="Deixe vazio para manter o PIN atual"
+                <label for="novo_pin">Novo PIN</label>
+                <input
+                    type="password"
+                    id="novo_pin"
+                    name="novo_pin"
+                    placeholder="Deixe em branco para manter o PIN atual"
                     maxlength="4"
                     pattern="[0-9]{4}"
+                    inputmode="numeric"
                 >
             </div>
 
             <div class="campo-form">
                 <label for="confirmar_novo_pin">Confirmar novo PIN</label>
-                <input 
-                    type="password" 
-                    id="confirmar_novo_pin" 
-                    name="confirmar_novo_pin" 
+                <input
+                    type="password"
+                    id="confirmar_novo_pin"
+                    name="confirmar_novo_pin"
                     placeholder="Repita o novo PIN"
                     maxlength="4"
                     pattern="[0-9]{4}"
+                    inputmode="numeric"
                 >
             </div>
 
         </div>
 
         <div class="acoes-form">
-            <button type="submit" class="btn btn-principal">Salvar alterações</button>
-            <a href="{{ url_for('usuarios') }}" class="btn btn-secundario">Voltar</a>
+            <button type="submit" class="btn btn-principal">
+                Salvar alterações
+            </button>
+
+            <a href="{{ url_for('usuarios') }}" class="btn btn-secundario">
+                Voltar
+            </a>
         </div>
 
     </form>
+
 </section>
 
-=======
-{% extends "base.html" %}
+<script>
+    const tipoUsuario = document.getElementById("tipo_usuario");
+    const campoCursoSetor = document.getElementById("campoCursoSetor");
+    const cursoSetor = document.getElementById("curso_setor");
 
-{% block title %}Editar usuário | KeyProtect{% endblock %}
+    function atualizarCampoCursoSetor() {
+        const tipo = tipoUsuario.value;
 
-{% block content %}
+        if (tipo === "Técnico" || tipo === "Funcionário") {
+            campoCursoSetor.style.display = "none";
+            cursoSetor.value = "";
+            cursoSetor.required = false;
+        } else {
+            campoCursoSetor.style.display = "flex";
+            cursoSetor.required = true;
+        }
+    }
 
-<section class="titulo-pagina">
-    <h2>Editar usuário</h2>
-    <p>Atualize os dados do usuário ou redefina o PIN de acesso.</p>
-</section>
+    tipoUsuario.addEventListener("change", atualizarCampoCursoSetor);
+    atualizarCampoCursoSetor();
+</script>
 
-<section class="form-box form-usuario-box">
-    <form method="POST">
-
-        <div class="form-grid form-grid-usuario">
-
-            <div class="campo-form">
-                <label for="matricula">Matrícula</label>
-                <input 
-                    type="text" 
-                    id="matricula" 
-                    name="matricula" 
-                    value="{{ usuario.matricula }}"
-                    required
-                >
-            </div>
-
-            <div class="campo-form">
-                <label for="nome">Nome completo</label>
-                <input 
-                    type="text" 
-                    id="nome" 
-                    name="nome" 
-                    value="{{ usuario.nome }}"
-                    required
-                >
-            </div>
-
-            <div class="campo-form">
-                <label for="tipo_usuario">Tipo de usuário</label>
-                <select id="tipo_usuario" name="tipo_usuario" required>
-                    <option value="">Selecione</option>
-                    <option value="Aluno" {% if usuario.tipo_usuario == "Aluno" %}selected{% endif %}>Aluno</option>
-                    <option value="Professor" {% if usuario.tipo_usuario == "Professor" %}selected{% endif %}>Professor</option>
-                    <option value="Técnico" {% if usuario.tipo_usuario == "Técnico" %}selected{% endif %}>Técnico</option>
-                    <option value="Funcionário" {% if usuario.tipo_usuario == "Funcionário" %}selected{% endif %}>Funcionário</option>
-                </select>
-            </div>
-
-            <div class="campo-form">
-                <label for="telefone">Telefone</label>
-                <input 
-                    type="text" 
-                    id="telefone" 
-                    name="telefone" 
-                    value="{{ usuario.telefone or '' }}"
-                    placeholder="Ex: (21) 99999-9999"
-                    maxlength="15"
-                >
-            </div>
-
-            <div class="campo-form">
-                <label for="curso_setor">Curso/Área</label>
-                <input 
-                    type="text" 
-                    id="curso_setor" 
-                    name="curso_setor" 
-                    value="{{ usuario.curso_setor or '' }}"
-                >
-            </div>
-
-            <div class="campo-form">
-                <label for="novo_pin">Novo PIN de 4 dígitos</label>
-                <input 
-                    type="password" 
-                    id="novo_pin" 
-                    name="novo_pin" 
-                    placeholder="Deixe vazio para manter o PIN atual"
-                    maxlength="4"
-                    pattern="[0-9]{4}"
-                >
-            </div>
-
-            <div class="campo-form">
-                <label for="confirmar_novo_pin">Confirmar novo PIN</label>
-                <input 
-                    type="password" 
-                    id="confirmar_novo_pin" 
-                    name="confirmar_novo_pin" 
-                    placeholder="Repita o novo PIN"
-                    maxlength="4"
-                    pattern="[0-9]{4}"
-                >
-            </div>
-
-        </div>
-
-        <div class="acoes-form">
-            <button type="submit" class="btn btn-principal">Salvar alterações</button>
-            <a href="{{ url_for('usuarios') }}" class="btn btn-secundario">Voltar</a>
-        </div>
-
-    </form>
-</section>
-
->>>>>>> 857ba1d (Atualização do Projeto Completo)
 {% endblock %}

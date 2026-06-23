@@ -2837,3 +2837,580 @@ button[type="submit"] *,
 .key-card * {
     color: #ffffff !important;
 }
+
+
+/* =========================
+   RESPONSIVIDADE E ACESSIBILIDADE MOBILE
+========================= */
+
+@media (max-width: 768px) {
+    .container {
+        padding: 20px 16px !important;
+    }
+
+    .topbar {
+        padding: 28px 16px 22px !important;
+    }
+
+    .header-content {
+        width: 100%;
+    }
+
+    .logo-img {
+        max-width: 180px !important;
+        height: auto;
+    }
+
+    .subtitulo-sistema {
+        font-size: 14px !important;
+        line-height: 1.5 !important;
+        text-align: center;
+        padding: 0 10px;
+        margin-top: 10px;
+    }
+
+    .menu {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        width: 100%;
+        margin-top: 18px;
+    }
+
+    .menu a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 46px;
+        padding: 10px 12px !important;
+        font-size: 15px !important;
+        border-radius: 12px;
+        text-align: center;
+    }
+
+    .theme-switch-wrapper {
+        margin-top: 16px !important;
+    }
+
+    .theme-toggle {
+        min-height: 44px;
+        padding: 10px 16px !important;
+        font-size: 14px !important;
+        border-radius: 999px;
+    }
+
+    .titulo-pagina h2 {
+        font-size: 2rem !important;
+        line-height: 1.2;
+    }
+
+    .titulo-pagina p {
+        font-size: 1rem !important;
+        line-height: 1.5;
+    }
+
+    /* A classe que agrupa os cards da home */
+    .home-grid,
+    .painel-grid,
+    .cards-home,
+    .home-cards {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+    }
+
+    .home-card {
+        min-height: 140px;
+        padding: 22px 18px !important;
+        border-radius: 16px;
+    }
+
+    .home-card-titulo {
+        font-size: 1.65rem !important;
+        line-height: 1.2;
+        margin-bottom: 10px;
+    }
+
+    .home-card-texto {
+        font-size: 1rem !important;
+        line-height: 1.5;
+    }
+
+    /* Inputs e botões maiores */
+    input,
+    select,
+    textarea,
+    button,
+    .btn,
+    .btn-principal,
+    .btn-secundario {
+        font-size: 16px !important;
+    }
+
+    input,
+    select,
+    textarea {
+        min-height: 48px;
+    }
+
+    textarea {
+        min-height: 120px;
+    }
+}
+
+@media (max-width: 480px) {
+    .menu {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .menu a {
+        font-size: 14px !important;
+        min-height: 44px;
+        padding: 10px 8px !important;
+    }
+
+    .logo-img {
+        max-width: 160px !important;
+    }
+
+    .subtitulo-sistema {
+        font-size: 13px !important;
+    }
+
+    .titulo-pagina h2 {
+        font-size: 1.8rem !important;
+    }
+
+    .home-card {
+        padding: 20px 16px !important;
+    }
+
+    .home-card-titulo {
+        font-size: 1.45rem !important;
+    }
+
+    .home-card-texto {
+        font-size: 0.98rem !important;
+    }
+}
+
+
+/* =========================
+   MOBILE - PAINEL INICIAL MAIS ACESSÍVEL
+========================= */
+
+@media (max-width: 768px) {
+    .container {
+        padding: 22px 16px !important;
+    }
+
+    .titulo-pagina {
+        margin-bottom: 18px !important;
+    }
+
+    .titulo-pagina h2 {
+        font-size: 1.9rem !important;
+        line-height: 1.2;
+    }
+
+    .titulo-pagina p {
+        font-size: 1rem !important;
+        line-height: 1.5;
+    }
+
+    .home-acoes {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+        width: 100% !important;
+    }
+
+    .home-card {
+        width: 100% !important;
+        min-height: 132px !important;
+        padding: 22px 20px !important;
+        border-radius: 16px !important;
+    }
+
+    .home-card-titulo {
+        font-size: 1.45rem !important;
+        line-height: 1.2 !important;
+        margin-bottom: 10px !important;
+    }
+
+    .home-card-texto {
+        font-size: 1rem !important;
+        line-height: 1.45 !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 20px 14px !important;
+    }
+
+    .home-acoes {
+        gap: 14px !important;
+    }
+
+    .home-card {
+        min-height: 125px !important;
+        padding: 20px 18px !important;
+    }
+
+    .home-card-titulo {
+        font-size: 1.35rem !important;
+    }
+
+    .home-card-texto {
+        font-size: 0.98rem !important;
+    }
+}
+
+
+/* =========================
+   MENU MOBILE COM HAMBÚRGUER
+========================= */
+
+/* Desktop: mantém centralizado */
+.mobile-header-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-toggle {
+    display: none;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .topbar {
+        padding: 18px 18px 20px !important;
+    }
+
+    .header-content {
+        width: 100%;
+    }
+
+    .mobile-header-row {
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .logo-link {
+        justify-content: flex-start;
+    }
+
+    .logo-img {
+        max-width: 150px !important;
+        height: auto;
+    }
+
+    .menu-toggle {
+        display: flex;
+        width: 48px;
+        height: 48px;
+        border: none;
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.16);
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 5px;
+        cursor: pointer;
+    }
+
+    .menu-toggle span {
+        width: 24px;
+        height: 3px;
+        border-radius: 999px;
+        background: #ffffff;
+        transition: all 0.25s ease;
+    }
+
+    .menu-toggle.ativo span:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+
+    .menu-toggle.ativo span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .menu-toggle.ativo span:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+    }
+
+    .subtitulo-sistema {
+        font-size: 15px !important;
+        line-height: 1.45 !important;
+        text-align: left !important;
+        margin-top: 18px !important;
+        margin-bottom: 0 !important;
+    }
+
+    .menu-area {
+        display: none;
+        width: 100%;
+        margin-top: 18px;
+        padding: 14px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.10);
+        border: 1px solid rgba(255, 255, 255, 0.16);
+    }
+
+    .menu-area.aberto {
+        display: block;
+        animation: abrirMenuMobile 0.2s ease;
+    }
+
+    .menu {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
+        width: 100%;
+    }
+
+    .menu a {
+        width: 100%;
+        min-height: 48px;
+        padding: 12px 14px !important;
+        display: flex !important;
+        align-items: center;
+        justify-content: flex-start;
+        font-size: 16px !important;
+        border-radius: 12px !important;
+        background: rgba(255, 255, 255, 0.14) !important;
+        color: #ffffff !important;
+    }
+
+    .menu a:hover {
+        background: rgba(255, 255, 255, 0.22) !important;
+    }
+
+    .theme-switch-wrapper {
+        margin-top: 12px !important;
+        justify-content: stretch !important;
+    }
+
+    .theme-toggle {
+        width: 100%;
+        min-height: 48px;
+        justify-content: center;
+        font-size: 15px !important;
+        border-radius: 12px !important;
+    }
+
+    .container {
+        padding-top: 28px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .topbar {
+        padding: 16px 16px 18px !important;
+    }
+
+    .logo-img {
+        max-width: 140px !important;
+    }
+
+    .subtitulo-sistema {
+        font-size: 14px !important;
+    }
+
+    .menu-toggle {
+        width: 46px;
+        height: 46px;
+    }
+}
+
+@keyframes abrirMenuMobile {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =========================
+   CAMPOS DE RETIRADA
+========================= */
+
+.campos-retirada-linha {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+@media (max-width: 768px) {
+    .campos-retirada-linha {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+}
+
+
+/* =========================
+   BOTÃO DISCRETO DE EXCLUIR CHAVE
+========================= */
+
+.form-excluir-discreto {
+    margin-top: 12px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-excluir-discreto {
+    background-color: #e8edf5 !important;
+    color: #0f172a !important;
+    border: 1px solid #d6deea !important;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn-excluir-discreto:hover {
+    background-color: #dbe3ef !important;
+}
+
+/* Dark mode */
+[data-theme="dark"] .btn-excluir-discreto {
+    background-color: #334155 !important;
+    color: #f8fafc !important;
+    border: 1px solid #475569 !important;
+}
+
+[data-theme="dark"] .btn-excluir-discreto:hover {
+    background-color: #475569 !important;
+}
+
+@media (max-width: 768px) {
+    .form-excluir-discreto {
+        justify-content: stretch;
+    }
+
+    .btn-excluir-discreto {
+        width: 100%;
+        min-height: 48px;
+    }
+}
+
+
+/* =========================
+   AJUSTE DE NOMES LONGOS NOS CARDS DE CHAVE
+========================= */
+
+.chave-card {
+    overflow: hidden;
+}
+
+.chave-card .chave-local {
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    font-size: 1.65rem !important;
+    line-height: 1.12 !important;
+    font-weight: 800 !important;
+    text-align: center;
+
+    word-break: normal;
+    overflow-wrap: break-word;
+}
+
+.chave-card .chave-local.texto-longo {
+    font-size: 1.28rem !important;
+    line-height: 1.15 !important;
+}
+
+.chave-card .chave-local.texto-muito-longo {
+    font-size: 1rem !important;
+    line-height: 1.18 !important;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+}
+
+.chave-card .chave-codigo {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    line-height: 1.1 !important;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .chave-card .chave-local {
+        font-size: 1.5rem !important;
+    }
+
+    .chave-card .chave-local.texto-longo {
+        font-size: 1.18rem !important;
+    }
+
+    .chave-card .chave-local.texto-muito-longo {
+        font-size: 0.95rem !important;
+    }
+
+    .chave-card .chave-codigo {
+        font-size: 0.75rem !important;
+    }
+}
+
+
+.chave-card.disponivel {
+    background: linear-gradient(135deg, #008f4c 0%, #00b86b 100%) !important;
+    box-shadow: 0 10px 22px rgba(0, 143, 76, 0.30) !important;
+}
+
+.chave-card.retirada {
+    background: linear-gradient(135deg, #b91c1c 0%, #ef4444 100%) !important;
+    opacity: 1 !important;
+    box-shadow: 0 10px 22px rgba(185, 28, 28, 0.30) !important;
+}
+
+
+/* =========================
+   CARD SELECIONADO - AZUL DA HOME
+========================= */
+
+.grade-chaves .chave-card.selecionada,
+.grade-chaves .chave-card.disponivel.selecionada,
+.grade-chaves button.chave-card.selecionada {
+    background: linear-gradient(135deg, #003f91 0%, #0b5fc0 100%) !important;
+    color: #ffffff !important;
+    transform: translateY(-2px) scale(1.01) !important;
+    box-shadow: 0 10px 24px rgba(0, 63, 145, 0.32) !important;
+    outline: 3px solid rgba(0, 63, 145, 0.22) !important;
+    outline-offset: 3px !important;
+}
+
+.grade-chaves .chave-card.selecionada::before {
+    background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.12),
+        rgba(255, 255, 255, 0)
+    ) !important;
+}
