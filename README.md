@@ -562,7 +562,7 @@ A proposta é demonstrar como ferramentas simples e acessíveis podem ser usadas
 
 ---
 
-## Autor
+## Autores
 
 Desenvolvido por **Pedro Fernandes da Costa**, **Myllena Borré de Oliveira** e **Bruno Leonardo Malafaia Vidal** .
 
