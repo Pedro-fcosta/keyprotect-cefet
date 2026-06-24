@@ -46,12 +46,6 @@ Além do controle operacional, o sistema também possui **dashboard com indicado
 
 ---
 
-### Editar chave
-
-![Editar chave](docs/screenshots/editar-chave.png)
-
----
-
 ### Usuários cadastrados
 
 ![Usuários cadastrados](docs/screenshots/usuarios-cadastrados.png)
